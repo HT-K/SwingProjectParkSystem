@@ -135,6 +135,21 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 				}
 			}
 			
+			try { //번호 입력창에 숫자가 아닌 문자 입력 시 오류창을 띄우기 위한 try-catch문
+                int check = Integer.parseInt(inputNumText.getText());
+            } catch (Exception ae) {
+                JOptionPane.showMessageDialog(null, "문자는 입력하시면 안돼요~", "숫자를 입력하세요.", 0);
+                inputNumText.setText("");
+                return;
+            }
+            
+            if (inputNumText.getText().length() > 4) //차량번호 입력은 4자리만 가능하게 설정
+            {
+                JOptionPane.showMessageDialog(null, "차량번호는 4자리겠지?", "차량번호 입력", 0);
+                inputNumText.setText("");
+                return;
+            }
+			
 			if (flag == 0) //parkCarList(ArrayList)에 저장되어 있는 차량 번호중 입력받은 번호를 찾지 못했을 시
 			{
 				System.out.println("출차 잘못 입력 = "  + inputNumText.getText());
