@@ -28,8 +28,8 @@ public class ParkingStartView extends JFrame {
 	
 	//로그인 창 왼쪽에 넣을 로고이미지
 	JLabel logoImgLabel = new JLabel();
-	ImageIcon logoImgIcon;
-	Image changeSize;
+	ImageIcon logoImgIcon; //이미지를 담을 ImageIcon
+	Image changeSize; //원본이미지의 크기를 바꿀 Image클래스 객체
 	
 	//로그인, 회원가입 패널
 	JPanel loginPanel = new JPanel(null);
