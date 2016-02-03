@@ -138,10 +138,10 @@ public class ParkingFeeList implements ActionListener {
 		int resultFee = 0; //이번달 총 요금을 저장하기 위한 변수
 		
 		Calendar presentTime = Calendar.getInstance(); //Calendar클래스를 이용해서 현재 시간의 년도,달,일을 알아낸다.
-		Date sDay = new Date(presentTime.YEAR + 115, presentTime.MONTH - 1, 1); //sDay에 현재 시간의 년도, 월, 1일(시작날)을 집어넣는다. ex)2016년 1월 1일 00:00:00 으로 저장된다.
+		Date sDay = new Date(presentTime.get(Calendar.YEAR) - 1900, presentTime.get(Calendar.MONTH), 1); //sDay에 현재 시간의 년도, 월, 1일(시작날)을 집어넣는다. ex)2016년 1월 1일 00:00:00 으로 저장된다.
 		System.out.println("현재 월의 시작 : " + sDay);
-		Date eDay = new Date(presentTime.YEAR + 115, presentTime.MONTH - 1, presentTime.getActualMaximum(Calendar.DATE)-1, 23, 59, 59); //eDay에 현재 시간의 년도, 월, 마지막일(30,31일 2월은 28일29일) 을 집어넣는다. ex)2016년 1월 31일 23:59:59 으로 저장된다.
-		//1901년도로 설정되어있어서 115년을 더해야 현재 시간의 년도가 나온다. 왜지?
+		Date eDay = new Date(presentTime.get(Calendar.YEAR) - 1900, presentTime.get(Calendar.MONTH), presentTime.getActualMaximum(Calendar.DATE), 23, 59, 59); //eDay에 현재 시간의 년도, 월, 마지막일(30,31일 2월은 28일29일) 을 집어넣는다. ex)2016년 1월 31일 23:59:59 으로 저장된다.
+		//3916년도로 설정되어있어서 -1900을 해야 현재 시간의 년도가 나온다. 왜지?
 		System.out.println("현재 월의 끝 : " + eDay);
 		
 		for (ParkFeeInfo fee : ParkingCarOut.feeList)
@@ -163,9 +163,9 @@ public class ParkingFeeList implements ActionListener {
 		
 		Calendar presentTime = Calendar.getInstance(); //Calendar클래스를 이용해서 현재 시간의 년도,달,일을 알아낸다.
 		
-		Date sDay = new Date(presentTime.YEAR + 115, presentTime.MONTH - 1, presentTime.DATE-3); //sDay에 오늘의 년도, 월, 일을 집어넣는다. ex)2016년 1월 1일 00:00:00 으로 저장된다.
+		Date sDay = new Date(presentTime.get(Calendar.YEAR) - 1900, presentTime.get(Calendar.MONTH), presentTime.get(Calendar.DATE)); //sDay에 오늘의 년도, 월, 일을 집어넣는다. ex)2016년 1월 1일 00:00:00 으로 저장된다.
 		System.out.println("오늘의 시작! : " + sDay);
-		Date eDay = new Date(presentTime.YEAR + 115, presentTime.MONTH - 1, presentTime.DAY_OF_MONTH-3, 23, 59, 59); //eDay에 오늘의 년도, 월, 일, 23시59분59초를 넣어놓는다.
+		Date eDay = new Date(presentTime.get(Calendar.YEAR) - 1900, presentTime.get(Calendar.MONTH), presentTime.get(Calendar.DATE), 23, 59, 59); //eDay에 오늘의 년도, 월, 일, 23시59분59초를 넣어놓는다.
 		System.out.println("오늘의 끝! : " + eDay);
 		
 		for (ParkFeeInfo fee : ParkingCarOut.feeList) //출차 차량에 대한 요금정보와 출차시간을 가진 feeList의 feeInfo객체들을 하나씩 꺼내서 값을 비교한다.
