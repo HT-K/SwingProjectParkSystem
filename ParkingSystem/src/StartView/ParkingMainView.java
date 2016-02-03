@@ -67,7 +67,7 @@ public class ParkingMainView {
 	{
 		this.frame = frame; //전송한 ParkingStartView의 frame을 받아온다.
 		this.memCheck = memCheck; //회원가입시 자동으로 저장되는 MemberInfo의 memCheck를 가져와 관리자인지 회원인지 비회원인지 구분한다.
-		this.memName = memName;
+		this.memName = memName; //화면에 회원 이름을 띄우기 위해 로그인 시 memList에서 회원의 이름을 받아온다. 관리자는 관리자, 비회원은 비회원으로 스트링 값을 받아온다.
 		this.frame.setContentPane(parkingMainFullScreen); //ParkingStartView의 ContentPane이었던 것을 현재 클래스의 JPanel로 변경함으로서 화면을 바꾼다.
 		
 		view(); //주차시스템 메인화면을 구성한 view()메소드 호출
@@ -247,7 +247,7 @@ public class ParkingMainView {
 		}
 	} //makeParkPlaceBtn() End
 	
-	public void makeFeeInfo()
+	public void makeFeeInfo() //메인 시스템 화면에 출력하게 될 주차 요금 안내판 이미지이다.
 	{
 		feeInfoIcon = new ImageIcon("주차요금안내판.png");
 		changeSizeImg = feeInfoIcon.getImage(); //이미지의 크기를 변환하기 위해 Image객체 변수에 이미지 담기
@@ -258,7 +258,7 @@ public class ParkingMainView {
 		parkingMainFullScreen.add(feeInfoImgLabel); //이미지 Label 패널에 추가
 	} //makeFeeInfo() End
 	
-	public void makeSystemBtn()
+	public void makeSystemBtn() //메인 시스템 화면에 나타내게 될 기능 버튼들이다.
 	{
 		//각 버튼 크기 조정
 		buttonFullPanel.setBounds(875, 455, 310, 205); //버튼들을 따로 담기 위한 패널의 위치와 크기 지정
