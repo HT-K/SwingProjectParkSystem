@@ -67,7 +67,7 @@ public class ParkingStartView extends JFrame {
 		passwordText.setText("");
 		
 		makeMoveImage(); //맨 처음 로그인 화면에 보이는 차가 움직이는 그림을 구현한 메소드
-		makeLogin(); //메인화면 아래에 로그인과 회원가입이 달린 패널 출력
+		login(); //메인화면 아래에 로그인과 회원가입이 달린 패널 출력
 		setVisible(true); //ParkingStartView가 상속받은 JFrame의 ContentPane On!
 		
 		FileSystem.loadMemberInfo(); //파일에 저장된 회원정보 리스트를 읽어온다.
@@ -89,7 +89,7 @@ public class ParkingStartView extends JFrame {
 		}
 	} //ParkingStartView 생성자 End
 	
-	public void makeMoveImage() //프로그램 시작화면, 로그인창 화면 위에 움직이는 그림을 만드는 스레드
+	public void makeMoveImage() 
 	{
 		for (int i = 0; i < carImgIcon.length; i++)
 		{
@@ -116,7 +116,7 @@ public class ParkingStartView extends JFrame {
 		thread.start(); //이미지 체인지 스레드 시작!
 	} //makeMoveImage() End
 	
-	public void makeLogin() //아이디와 비밀번호를 입력하는 로그인 창을 구성한다.
+	public void login() //아이디와 비밀번호를 입력하는 로그인 창을 구성한다.
 	{
 		loginPanel.setForeground(Color.WHITE);
 		loginPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));

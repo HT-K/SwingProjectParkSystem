@@ -117,6 +117,21 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 				cKind = car2Box.getLabel(); //"중형차" 스트링 값 가져오기
 			}
 			
+            try { //번호 입력창에 숫자가 아닌 문자 입력 시 오류창을 띄우기 위한 try-catch문
+                int check = Integer.parseInt(inputNumText.getText());
+            } catch (Exception ae) {
+                JOptionPane.showMessageDialog(null, "문자는 입력하시면 안돼요~", "숫자를 입력하세요.", 0);
+                inputNumText.setText("");
+                return;
+            }
+            
+            if (inputNumText.getText().length() > 4) //차량번호 입력은 4자리만 가능하게 설정
+            {
+                JOptionPane.showMessageDialog(null, "차량번호는 4자리겠지?", "차량번호 입력", 0);
+                inputNumText.setText("");
+                return;
+            }
+			
 			boolean find = false; //List에서 같은 데이터를 찾으면 true로 바꾸고 아니면 false상태로 for문을 빠져나간다.
 			for (ParkCarInfo car : parkCarList) //주차차량 정보를 담은 CarInfo객체들이 저장된 List에서 객체들을 하나씩 접근해서 그 안의 내용을 검사한다.
 			{
