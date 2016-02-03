@@ -78,7 +78,7 @@ public class ParkingStartView extends JFrame {
 		{
 			if (mem.getId().equals("admin"))
 			{
-				find = true;
+				find = true; //이미 memList에 관리자 아이디가 있으면 추가 할 필요가 없다!
 				break;
 			}
 		}
