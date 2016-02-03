@@ -101,7 +101,7 @@ public class ParkingFeeList implements ActionListener {
 		titleFeeLabel.setBounds(60, 0, 200, 30);
 		
 		feeFullPanel.add(resultFeeLabel); //가운데 정산결과 요금
-		resultFeeLabel.setBounds(90, 40, 180, 30);
+		resultFeeLabel.setBounds(95, 40, 180, 30);
 		
 		feeFullPanel.add(feeOkButton); //'정산확인' 버튼
 		feeOkButton.setBounds(90, 80, 100, 30);
