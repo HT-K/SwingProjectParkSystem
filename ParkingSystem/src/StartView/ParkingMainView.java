@@ -84,7 +84,7 @@ public class ParkingMainView {
 		feeCalcButton.addActionListener(new ParkingFeeList(frame)); //'요금정산'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
 		parkListButton.addActionListener(new ParkingCarList(frame)); //'주차내역'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
 		parkState.addActionListener(new ParkingCarState(frame, memCheck)); //'주차현황'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 객체 생성
-	
+		
 		//파일에 저장된 내용들을 전부 불러온다.
 		FileSystem.loadCarInfo(); //파일에 저장된 차량정보 리스트를 읽어온다.
 		System.out.println("차량 리스트 ; " + ParkingCarIn.parkCarList); //파일에 저장된 리스트 개수 확인.
@@ -113,6 +113,11 @@ public class ParkingMainView {
 		if (memCheck == 2 || memCheck == 3) //회원, 비회원만 출력
 		{
 			makeFeeInfo(); //주차요금 안내판
+		}
+		
+		if (memCheck == 1) //관리자만 주차차량번호리스트가 출력되게 한다.
+		{
+			new ParkingCarNumList(frame);
 		}
 		makeSystemBtn(); //기능 버튼들
 	} //view() End
@@ -264,7 +269,7 @@ public class ParkingMainView {
 		for (int i = 0; i < parkButton.length; i++)
 		{
 			//각 버튼의 리스너를 구현한 클래스로 익명클래스, 즉 각기 다른 객체 생성으로 핸들러 처리
-			parkButton[i].addActionListener(new ParkingCarIn(frame)); //버튼 클릭 시 발생하는 이벤트를 처리하기 위해 리스너를 구현한 클래스 객체를 생성
+			parkButton[i].addActionListener(new ParkingCarIn(frame, memCheck)); //버튼 클릭 시 발생하는 이벤트를 처리하기 위해 리스너를 구현한 클래스 객체를 생성
 		}
 	} //makeParkPlaceBtn() End
 	

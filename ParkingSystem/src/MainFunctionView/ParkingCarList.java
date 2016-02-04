@@ -43,6 +43,7 @@ public class ParkingCarList implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		ParkingCarState.parkScroll.setVisible(false); //같은 공간에 출력되는 '주차현황'을 보이지 않게 설정한다.
+		ParkingCarNumList.parkScroll.setVisible(false); //같은 공간에 출력되는 '주차차량번호'를 보이지 않게 설정한다.
 		parkScroll.setVisible(true); //'주차내역' 출력
 	}
 	

@@ -174,13 +174,21 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String time = format.format(presentTime.getTime()); //프린트 하기 위해 parkPring 벡터에 저장
 				
+				if (park.getMemOrNotmem() == true) //관리자는 memCheck가 1인데 주차요금 정산 시 회원 혹은 비회원과 같은 요금으로 계산되어야한다.
+				{
+					memCheck = 2; //주차한 차량이 회원일 경우 관리자도 회원변수와 같은 2번을 가지고
+				}
+				else
+				{
+					memCheck = 3; //주차한 차량이 비회원일 경우 관리자도 비회원 변수와 같은 3번을 가진다음 주차요금이 계산된다.
+				}
 				resultFee = calculateFee(memCheck, park.getcarKind(), park.getCarInTime(), carOutTime); //주차요금 계산 메소드 호출, 자동으로 주차요금을 계산해서 값을 리턴받는다.
 				rfParkFeeLabel.setText("주차요금 : " + resultFee + "원");
 				
 				feeList.add(new ParkFeeInfo(resultFee, new Date())); //출차하기를 눌렀을 때 요금과 현재시간을 FeeInfo객체를 생성하며 데이터를 넣고, ArrayList에 객체를 저장한다.
 				FileSystem.saveFeeListInfo(feeList); //feeList에 있는 요금과 시간을 파일에 저장한다.
 				
-				ParkingCarIn.parkPrintList.add(park.getparkPlaceNum() + "번 주차공간 " + inputNumText.getText() + "번 차량  " + time + "에 출차."); //parkPrint 벡터에 어느 주차공간에 몇번 차량이 출차되었는지 저장한다.
+				ParkingCarIn.parkPrintList.add(park.getparkPlaceNum() + "번 공간 " + inputNumText.getText() + "번 차량  " + time + "에 출차."); //parkPrint 벡터에 어느 주차공간에 몇번 차량이 출차되었는지 저장한다.
 				FileSystem.saveParkInfo(ParkingCarIn.parkPrintList); //차량 출차를 파일에 저장한다.
 				
 				ParkingCarIn.parkCarList.remove(park); //출차가 완료되면 그 주차공간과 차량 내용을 담은 CarInfo객체(park)를 ArrayList에서에서 삭제한다.

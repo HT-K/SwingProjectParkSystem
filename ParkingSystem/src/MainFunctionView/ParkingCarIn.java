@@ -42,9 +42,14 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 	int parkNum; //주차한 공간의 인덱스 번호
 	JButton parkButton; //클릭한 주차공간의 버튼 정보
 	
-	public ParkingCarIn (ParkingStartView frame) //ParkingSystem에서 버튼(주차공간) 클릭 이벤트 발생 시 이쪽으로 넘어오게 된다. //ParkingCarIn클래스의 객체 생성과 동시에 다이어로그를 구성해놓는다.
+	//회원과 비회원을 구분하기 위한 변수
+	int memCheck;
+	boolean memOrNotMem;
+	
+	public ParkingCarIn (ParkingStartView frame, int memCheck) //ParkingSystem에서 버튼(주차공간) 클릭 이벤트 발생 시 이쪽으로 넘어오게 된다. //ParkingCarIn클래스의 객체 생성과 동시에 다이어로그를 구성해놓는다.
 	{
 		this.frame = frame; //ParkingStartView클래스에서 생성된 JFrame을 가져온다.
+		this.memCheck = memCheck;
 		//각 버튼의 이벤트 핸들러는 한개씩만 존재해야 하므로 생성자에 넣어준다! , 이렇게 하는게 좋다!
 		parkOkButton.addActionListener(new parkOkListener());
 		cancelButton.addActionListener(new cancelListener());
@@ -180,11 +185,19 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 		 long carIntime = presentTime.getTimeInMillis(); //주차 등록 한  시간을 초로 바꿔서 저장
 		 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //시간을 저장할 틀
 		 String time = format.format(presentTime.getTime()); //'주차내역'테이블에 출력하기 위해 변환해서 저장
-		
-		 parkCarList.add(new ParkCarInfo(parkNum, checkKind, inputNumText.getText(), carIntime)); //주차공간번호, 차량종류, 입력받은 차량번호, 주차공간버튼On설정, 주차차량 입고설정
+		 
+		 if (memCheck == 1 || memCheck == 2)
+		 {
+			 memOrNotMem = true;
+		 }
+		 else
+		 {
+			 memOrNotMem = false;
+		 }
+		 parkCarList.add(new ParkCarInfo(parkNum, checkKind, inputNumText.getText(), memOrNotMem, carIntime)); //주차공간번호, 차량종류, 입력받은 차량번호, 주차공간버튼On설정, 주차차량 입고설정
 		 FileSystem.saveCarInfo(parkCarList); //주차완료된 차량의 정보를 담은 ArrayList를 파일에 저장한다
 		 
-		 parkPrintList.add(parkNum + "번 주차공간 " + inputNumText.getText() + "번 차량  " + time + "에 입차."); //parkPrint 벡터에 어느 주차공간에 몇번 차량을 등록되었는지 저장한다.
+		 parkPrintList.add(parkNum + "번 공간 " + inputNumText.getText() + "번 차량  " + time + "에 입차."); //parkPrint 벡터에 어느 주차공간에 몇번 차량을 등록되었는지 저장한다.
 		 FileSystem.saveParkInfo(parkPrintList); //주차 내역 정보를 담은 ArrayList를 파일에 저장한다.
 		
 		 parkButton.setText("주차중"); //주차 등록이 완료되면 그 주차공간은 '주차중'이라는 표시를 하게함. ParkingMainView에서 주차공간 클릭 시 이 클래스의 이벤트 리스너로 클릭된 버튼의 내용과 인덱스를 받아오게 된다.
