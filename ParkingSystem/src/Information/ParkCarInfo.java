@@ -33,7 +33,7 @@ public class ParkCarInfo implements Serializable { //각 주차 차량의 정보를 담기 
 	public String getcarNum() {
 		return carNum;
 	}
-
+	
 	public long getCarInTime() {
 		return carInTime;
 	}

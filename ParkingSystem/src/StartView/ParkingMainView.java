@@ -20,9 +20,13 @@ public class ParkingMainView {
 	ParkingStartView frame; //ParkingStartView에서 생성된 JFrame를 받기 위한 변수
 	JPanel parkingMainFullScreen = new JPanel(null); //ParkingStartView에서 생성된 JFrame의 ContentPane을 여기서 JPanel로 변경하여 화면이 넘어가게 한다.
 	
+	//로고이미지를 상단에 넣기 위한 컴포넌트
+	ImageIcon logoImgIcon;
+	JLabel logoImgLabel = new JLabel();
+	
 	//North부분에는 이미지가 삽입된다.
-	ImageIcon logoImgIcon[] = new ImageIcon[7]; //메인 화면 상단에 이미지를 삽입하기 위해 이미지아이콘 객체이용
-	JLabel logoImgLabel = new JLabel(); //이미지를 담기위한 라벨
+	ImageIcon mainImgIcon[] = new ImageIcon[7]; //메인 화면 상단에 이미지를 삽입하기 위해 이미지아이콘 객체이용
+	JLabel mainImgLabel = new JLabel(); //이미지를 담기위한 라벨
 	Image changeSizeImg; //ImageIcon 객체로는 사이즈를 변경하기가 힘들다. Image객체를 이용해서 이미지 사이즈를 변경한다.
 	
 	//이미지 아래부분에 주차공간(버튼)을 생성한다.
@@ -33,6 +37,9 @@ public class ParkingMainView {
 	
 	//ActionEvent에 쓰일 버튼을 저장한 JButton클래스의 객체 배열 선언 ,출차할 때 쓰기위해 static으로 선언
 	public static JButton[] parkButton = new JButton[60];
+	
+	//주차공간의 버튼 생성 후 다음 라인에 넣는 Label을 설정하기 위한 Label
+	JLabel[] parkLabel = new JLabel[3];
 	
 	//동쪽에 시간과 테이블, 버튼을 생성한다.
 	JPanel buttonFullPanel = new JPanel(null); //버튼 들을 담기 위한 패널
@@ -83,10 +90,10 @@ public class ParkingMainView {
 		System.out.println("차량 리스트 ; " + ParkingCarIn.parkCarList); //파일에 저장된 리스트 개수 확인.
 		for (ParkCarInfo car : ParkingCarIn.parkCarList) //파일에서 읽어온 리스트의 내용으로 주차차량 정보를 가져와 주차시스템에 적용시킨다. (주차되어있는 공간은 계속 빨간색 표시!)
 		{
-				JButton complete = ParkingMainView.parkButton[car.getparkPlaceNum()-1]; //주차완료 시에 클릭했던 버튼의 정보를 받아온다.
-				complete.setText("주차중"); //프로그램을 껏다 켯을시에 주차되어있는 부분이 초기화되지 않도록 파일에 저장된 List의 내용을 토대로 다시 주차중으로 바꿔준다
-				complete.setBackground(new Color(0xFF, 66, 66)); //주차중의 배경색은 빨간색
-				complete.setEnabled(false); //읽어온 데이터대로 주차중인 곳은 비활성화 처리한다.
+			 JButton complete = ParkingMainView.parkButton[car.getparkPlaceNum()-1]; //주차완료 시에 클릭했던 버튼의 정보를 받아온다.
+			 complete.setText("주차중"); //프로그램을 껏다 켯을시에 주차되어있는 부분이 초기화되지 않도록 파일에 저장된 List의 내용을 토대로 다시 주차중으로 바꿔준다
+			 complete.setBackground(new Color(0xFF, 66, 66)); //주차중의 배경색은 빨간색
+			 complete.setEnabled(false); //읽어온 데이터대로 주차중인 곳은 비활성화 처리한다.
 		}
 		
 		FileSystem.loadParkListInfo(); //파일에 저장된 주차내역 리스트를 읽어온다.
@@ -98,6 +105,7 @@ public class ParkingMainView {
 	
 	public void view() //주차시스템 메인화면을 구성한 메소드 들을 호출한다.
 	{
+		makeParkLogoImg();//로고이미지 출력
 		makeParkMainImg(); //맨 위에 나타나는 이미지
 		makeDateTime(); //맨 위에 나타나는 날짜와 시간
 		makePrintName(); //접속 시 이름을 띄워주는
@@ -109,28 +117,39 @@ public class ParkingMainView {
 		makeSystemBtn(); //기능 버튼들
 	} //view() End
 	
+	public void makeParkLogoImg() //상단에 로고이미지를 띄우는 메소드
+	{
+		logoImgIcon = new ImageIcon("로고5.png");
+		changeSizeImg = logoImgIcon.getImage(); //로고이미지의 크기를 변환하기 위해 Image클래스 객체를 이용한다.
+		changeSizeImg = changeSizeImg.getScaledInstance(140, 140, java.awt.Image.SCALE_SMOOTH); //로고이미지의 크기를 140, 140으로 변환시킨다.
+		logoImgIcon = new ImageIcon(changeSizeImg); //변환된 크기의 이미지를 ImageIcon에 담는다.
+		logoImgLabel.setIcon(logoImgIcon);
+		logoImgLabel.setBounds(30, 0, 140, 200); //로고이미지를 담은 Label의 위치와 크기 설정
+		parkingMainFullScreen.add(logoImgLabel); //로고이미지를 담은 Label을 컨텐트팬에 붙인다.
+	}
+	
 	public void makeParkMainImg()
 	{
 		//위쪽에 들어갈 것은 이미지뿐이다.
-		parkingMainFullScreen.add(logoImgLabel);
+		parkingMainFullScreen.add(mainImgLabel);
 		parkingMainFullScreen.setBackground(Color.white);
-		logoImgLabel.setBounds(5, 0, 900, 200);
+		mainImgLabel.setBounds(150, 0, 760, 200);
 		
-		for (int i = 0; i < logoImgIcon.length; i++)
+		for (int i = 0; i < mainImgIcon.length; i++)
 		{
-			logoImgIcon[i] = new ImageIcon("logo"+(i+1)+".png"); //각 ImageIcon에 이미지를 담는다.
-			changeSizeImg = logoImgIcon[i].getImage(); //이미지 크기를 변경하기 위해 이미지아이콘에 저장된 이미지를 꺼내서 Image변수에 저장
-			changeSizeImg = changeSizeImg.getScaledInstance(900,200, java.awt.Image.SCALE_SMOOTH); //원본 이미지의 크기 조정
-			logoImgIcon[i] = new ImageIcon(changeSizeImg); //변경된 크기의 이미지를 다시 ImageIcon에 담는다.
+			mainImgIcon[i] = new ImageIcon("logo"+(i+1)+".png"); //각 ImageIcon에 이미지를 담는다.
+			changeSizeImg = mainImgIcon[i].getImage(); //이미지 크기를 변경하기 위해 이미지아이콘에 저장된 이미지를 꺼내서 Image변수에 저장
+			changeSizeImg = changeSizeImg.getScaledInstance(780,200, java.awt.Image.SCALE_SMOOTH); //원본 이미지의 크기 조정
+			mainImgIcon[i] = new ImageIcon(changeSizeImg); //변경된 크기의 이미지를 다시 ImageIcon에 담는다.
 		}
 		Thread thread = new Thread(new Runnable() { //첫 화면에 자동차 지나가게 하는 스레드
 			@Override
 			public void run() {
 				while (true)
 				{
-					for (int i = 0; i < logoImgIcon.length; i++) 
+					for (int i = 0; i < mainImgIcon.length; i++) 
 					{
-						logoImgLabel.setIcon(logoImgIcon[i]); //1초마다 라벨에 이미지를 바꾸어 넣는다. 그러면 마치 움직이는 듯한 이미지의 모습을 볼 수 있을것!
+						mainImgLabel.setIcon(mainImgIcon[i]); //1초마다 라벨에 이미지를 바꾸어 넣는다. 그러면 마치 움직이는 듯한 이미지의 모습을 볼 수 있을것!
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {}
@@ -219,7 +238,8 @@ public class ParkingMainView {
 		}); //nextButton event End
 		
 		int buttonCount = 1; //각 버튼 배열의 인덱스를 지정하기 위한 변수
-		for (int f = 0; f < parkFloorPanel.length; f++) //각 층에 주차공간을 버튼과 레이블로 구현
+		int labelCount = 0;
+		for (int f = 0; f < parkFloorPanel.length; f++) //각 층에 주차공간을 버튼과 라벨로 구현
 		{
 			for (int i = 0; i < 3; i++)
 			{
@@ -239,6 +259,7 @@ public class ParkingMainView {
 				}
 			}
 		}
+		System.out.println(labelCount);
 		
 		for (int i = 0; i < parkButton.length; i++)
 		{

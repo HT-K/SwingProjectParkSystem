@@ -10,6 +10,7 @@ public class MemberInfo implements Serializable{ //회원정보를 저장하기 위한 클래
 	private String name;
 	private String phone;
 	private String email;
+	private int parkCount;
 	
 	public MemberInfo (int memCheck, String id, String password, String name, String phone, String email)
 	{
@@ -43,5 +44,14 @@ public class MemberInfo implements Serializable{ //회원정보를 저장하기 위한 클래
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public void serParkCount(int parkCount) { //주차등록 시 이 회원이 주차를 한 상태라는 걸 인식하기 위한 변수 , 주차등록 시 값을 1, 주차등록한 상태가 아닐 시 0
+		this.parkCount = parkCount;
+	}
+	
+	public int gerParkCount()
+	{
+		return parkCount;
 	}
 }

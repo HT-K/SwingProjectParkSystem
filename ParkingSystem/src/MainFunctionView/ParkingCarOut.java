@@ -171,7 +171,7 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 			
 				Calendar presentTime = Calendar.getInstance(); //차량 출차 등록을 클릭한 시간 얻어오기
 				long carOutTime = presentTime.getTimeInMillis(); //출차 등록 한  시간을 초로 바꿔서 저장
-				SimpleDateFormat format = new SimpleDateFormat("hh시 mm분 ss초");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String time = format.format(presentTime.getTime()); //프린트 하기 위해 parkPring 벡터에 저장
 				
 				resultFee = calculateFee(memCheck, park.getcarKind(), park.getCarInTime(), carOutTime); //주차요금 계산 메소드 호출, 자동으로 주차요금을 계산해서 값을 리턴받는다.

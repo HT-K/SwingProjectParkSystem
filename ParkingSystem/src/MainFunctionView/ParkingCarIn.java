@@ -45,7 +45,6 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 	public ParkingCarIn (ParkingStartView frame) //ParkingSystem에서 버튼(주차공간) 클릭 이벤트 발생 시 이쪽으로 넘어오게 된다. //ParkingCarIn클래스의 객체 생성과 동시에 다이어로그를 구성해놓는다.
 	{
 		this.frame = frame; //ParkingStartView클래스에서 생성된 JFrame을 가져온다.
-		
 		//각 버튼의 이벤트 핸들러는 한개씩만 존재해야 하므로 생성자에 넣어준다! , 이렇게 하는게 좋다!
 		parkOkButton.addActionListener(new parkOkListener());
 		cancelButton.addActionListener(new cancelListener());
@@ -112,7 +111,7 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
             }
            
             checkException = checkNumInCarList(); //입력받은 4자리 숫자가 carList에 있는 숫자인지 아닌지 검사하는 메소드
-            if (checkNumInCarList() == true) //true면 이미 주차등록한 차량의 번호이므로 다시 입력받게 한다!
+            if (checkException == true) //true면 이미 주차등록한 차량의 번호이므로 다시 입력받게 한다!
             {
         	    inputNumText.setText("");
         	    inputNumText.requestFocus();
@@ -143,7 +142,7 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
           return true; //텍스트필드에서 가져온 값이 4자리 숫자가 정확하면 true리턴
 	}
 	
-	public boolean checkNumInCarList()
+	public boolean checkNumInCarList() //텍스트필드에 입력된 차량번호와 CarList에 저장된 차량번호 중 같은 것이 있는지 없는지 검사한다. 같은 것이 있으면 다시입력받게 한다
 	{
 		  boolean find = false; //List에서 같은 데이터를 찾으면 true로 바꾸고 아니면 false상태로 for문을 빠져나간다.
 		  for (ParkCarInfo car : parkCarList) //주차차량 정보를 담은 CarInfo객체들이 저장된 List에서 객체들을 하나씩 접근해서 그 안의 내용을 검사한다.
@@ -164,7 +163,7 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 		  return false;
 	}
 	
-	public void storeCarInfoIntoList()
+	public void storeCarInfoIntoList() //주차등록 다이어로그에 입력된 내용을 CarList(ArrayList)에 저장하는 메소드다
 	{
 		 //List안에 입력받은 번호과 같은 번호가 없으면 주차등록이 가능하게 된다!
 		 String checkKind = ""; //라디오버튼에 있는 텍스트(소형차,중형차)를 담기 위한 변수
@@ -179,12 +178,12 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 		
 		 Calendar presentTime = Calendar.getInstance(); //차량 주차 등록을 클릭한 시간 얻어오기
 		 long carIntime = presentTime.getTimeInMillis(); //주차 등록 한  시간을 초로 바꿔서 저장
-		 SimpleDateFormat format = new SimpleDateFormat("hh시 mm분 ss초"); //시간을 저장할 틀
+		 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //시간을 저장할 틀
 		 String time = format.format(presentTime.getTime()); //'주차내역'테이블에 출력하기 위해 변환해서 저장
 		
 		 parkCarList.add(new ParkCarInfo(parkNum, checkKind, inputNumText.getText(), carIntime)); //주차공간번호, 차량종류, 입력받은 차량번호, 주차공간버튼On설정, 주차차량 입고설정
 		 FileSystem.saveCarInfo(parkCarList); //주차완료된 차량의 정보를 담은 ArrayList를 파일에 저장한다
-		
+		 
 		 parkPrintList.add(parkNum + "번 주차공간 " + inputNumText.getText() + "번 차량  " + time + "에 입차."); //parkPrint 벡터에 어느 주차공간에 몇번 차량을 등록되었는지 저장한다.
 		 FileSystem.saveParkInfo(parkPrintList); //주차 내역 정보를 담은 ArrayList를 파일에 저장한다.
 		
@@ -192,7 +191,7 @@ public class ParkingCarIn extends JOptionPane implements ActionListener {
 		 parkButton.setBackground(new Color(0xFF, 66, 66)); //주차중 버튼의 배경을 빨간색으로 지정한다.
 		 parkButton.setEnabled(false); //주차된 곳 버튼 비활성화
 	}
-	
+
 	class cancelListener implements ActionListener
 	{
 		@Override
