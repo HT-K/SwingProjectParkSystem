@@ -23,11 +23,17 @@ public class ParkingMainView {
 	//로고이미지를 상단에 넣기 위한 컴포넌트
 	ImageIcon logoImgIcon;
 	JLabel logoImgLabel = new JLabel();
+	Image changeSizeImg; //ImageIcon 객체로는 사이즈를 변경하기가 힘들다. Image객체를 이용해서 이미지 사이즈를 변경한다.
 	
-	//North부분에는 이미지가 삽입된다.
+	//상단에 Main 주차이미지가 삽입된다.
 	ImageIcon mainImgIcon[] = new ImageIcon[7]; //메인 화면 상단에 이미지를 삽입하기 위해 이미지아이콘 객체이용
 	JLabel mainImgLabel = new JLabel(); //이미지를 담기위한 라벨
-	Image changeSizeImg; //ImageIcon 객체로는 사이즈를 변경하기가 힘들다. Image객체를 이용해서 이미지 사이즈를 변경한다.
+	
+	//날짜와 시간을 담기 위한 컴포넌트
+	ImageIcon timeImgIcon;
+	JLabel timeImgLabel;
+	JLabel pDateLabel = new JLabel(); //연도, 월, 일을 담기 위한 Label
+	JLabel pTimeLabel = new JLabel(); //시간을 담기 위한 Label
 	
 	//이미지 아래부분에 주차공간(버튼)을 생성한다.
 	CardLayout cardLayout = new CardLayout(); //주차공간의 레이아웃은 CardLayout이어야한다.
@@ -41,7 +47,7 @@ public class ParkingMainView {
 	//주차공간의 버튼 생성 후 다음 라인에 넣는 Label을 설정하기 위한 Label
 	JLabel[] parkLabel = new JLabel[3];
 	
-	//동쪽에 시간과 테이블, 버튼을 생성한다.
+	//동쪽에 테이블, 버튼을 생성한다.
 	JPanel buttonFullPanel = new JPanel(null); //버튼 들을 담기 위한 패널
 	JButton parkListButton = new JButton("주차내역"); //관리자만
 	JButton feeCalcButton = new JButton("요금정산"); //관리자만
@@ -49,8 +55,7 @@ public class ParkingMainView {
 	JButton parkState = new JButton("주차현황"); //고객, 관리자
 	JButton prevButton = new JButton("이전층"); //고객, 관리자
 	JButton nextButton = new JButton("다음층"); //고객, 관리자
-	JLabel pDateLabel = new JLabel(); //연도, 월, 일을 담기 위한 Label
-	JLabel pTimeLabel = new JLabel(); //시간을 담기 위한 Label
+	
 	
 	//회원의 이름을 시간 밑에 출력 시킨다.
 	JLabel memNameLabel = new JLabel();
@@ -75,7 +80,7 @@ public class ParkingMainView {
 		this.frame = frame; //전송한 ParkingStartView의 frame을 받아온다.
 		this.memCheck = memCheck; //회원가입시 자동으로 저장되는 MemberInfo의 memCheck를 가져와 관리자인지 회원인지 비회원인지 구분한다.
 		this.memName = memName; //화면에 회원 이름을 띄우기 위해 로그인 시 memList에서 회원의 이름을 받아온다. 관리자는 관리자, 비회원은 비회원으로 스트링 값을 받아온다.
-		this.frame.setContentPane(parkingMainFullScreen); //ParkingStartView의 ContentPane이었던 것을 현재 클래스의 JPanel로 변경함으로서 화면을 바꾼다.
+		this.frame.setContentPane(parkingMainFullScreen); //ParkingStartView의 ContentPane이었던 것을 현재 클래스의 JPanel로 변경함으로서 화면을 바꾼다. 화면 전환은 이렇게 하자!!!
 		
 		view(); //주차시스템 메인화면을 구성한 view()메소드 호출
 		
@@ -108,6 +113,7 @@ public class ParkingMainView {
 		makeParkLogoImg();//로고이미지 출력
 		makeParkMainImg(); //맨 위에 나타나는 이미지
 		makeDateTime(); //맨 위에 나타나는 날짜와 시간
+		makeTimeImg(); //시간이 들어갈 이미지
 		makePrintName(); //접속 시 이름을 띄워주는
 		makeParkPlaceBtn(); //주차공간 버튼을 구현
 		if (memCheck == 2 || memCheck == 3) //회원, 비회원만 출력
@@ -126,7 +132,7 @@ public class ParkingMainView {
 	{
 		logoImgIcon = new ImageIcon("로고5.png");
 		changeSizeImg = logoImgIcon.getImage(); //로고이미지의 크기를 변환하기 위해 Image클래스 객체를 이용한다.
-		changeSizeImg = changeSizeImg.getScaledInstance(140, 140, java.awt.Image.SCALE_SMOOTH); //로고이미지의 크기를 140, 140으로 변환시킨다.
+		changeSizeImg = changeSizeImg.getScaledInstance(140, 120, java.awt.Image.SCALE_SMOOTH); //로고이미지의 크기를 140, 140으로 변환시킨다.
 		logoImgIcon = new ImageIcon(changeSizeImg); //변환된 크기의 이미지를 ImageIcon에 담는다.
 		logoImgLabel.setIcon(logoImgIcon);
 		logoImgLabel.setBounds(30, 0, 140, 200); //로고이미지를 담은 Label의 위치와 크기 설정
@@ -167,23 +173,23 @@ public class ParkingMainView {
 	
 	public void makeDateTime()
 	{
-		pDateLabel.setFont(new Font("고딕", 25, 30)); //현재 연도, 월, 일의 글씨체와 색지정
-		pDateLabel.setBounds(930, 60, 300, 30); //DATE라벨 크기 및 위치 지정
+		pDateLabel.setFont(new Font("DS-Digital", Font.BOLD, 35)); //현재 연도, 월, 일의 글씨체와 색지정
+		//pDateLabel.setBounds(930, 60, 300, 30); //DATE라벨 크기 및 위치 지정
 		
-		pTimeLabel.setFont(new Font("고딕", 25, 30)); //현재 시간의 글씨체와 색지정
-		pTimeLabel.setBounds(930, 90, 300, 50); //시간라벨 크기 및 위치 지정
+		pTimeLabel.setFont(new Font("DS-Digital", Font.BOLD, 55)); //현재 시간의 글씨체와 색지정
+		//pTimeLabel.setBounds(930, 90, 300, 50); //시간라벨 크기 및 위치 지정
 		
-		parkingMainFullScreen.add(pDateLabel); //ParkingStartView의 ContentPane에 Date라벨 추가
+		/*parkingMainFullScreen.add(pDateLabel); //ParkingStartView의 ContentPane에 Date라벨 추가
 		parkingMainFullScreen.add(pTimeLabel); //ParkingStartView의 ContentPane에 Time라벨 추가
-		Thread thread = new Thread(new Runnable() { //현재시간을 동작하기 위한 스레드, 익명클래스 기법을 사용하여 Runnable인터페이스의 run()메소드 오버라이드 하여 구현
+*/		Thread thread = new Thread(new Runnable() { //현재시간을 동작하기 위한 스레드, 익명클래스 기법을 사용하여 Runnable인터페이스의 run()메소드 오버라이드 하여 구현
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
 				while (true) {
 					Calendar presentTime = Calendar.getInstance(); //현재 시간을 가져온다.
-					SimpleDateFormat format = new SimpleDateFormat("hh시 mm분 ss초"); //시간 출력 형식 지정
+					SimpleDateFormat format = new SimpleDateFormat("   HH      mm  ss"); //시간 출력 형식 지정
 					try {
-						String date = presentTime.get(Calendar.YEAR) + "년" + (presentTime.get(Calendar.MONTH) + 1) + "월" + presentTime.get(Calendar.DATE) + "일"; //가져온 시간의 연도, 월, 일을 저장한다.
+						String date = presentTime.get(Calendar.YEAR) + "      " + (presentTime.get(Calendar.MONTH) + 1) + "      " + presentTime.get(Calendar.DATE) + ""; //가져온 시간의 연도, 월, 일을 저장한다.
 						String time = format.format(presentTime.getTime()); //현재 시간을 가져와서 format1형식에 맞게 String에 저장
 						pDateLabel.setText(date); //pDate Label에 연월일 출력
 						pTimeLabel.setText(time); //pTime Label에 시간 출력
@@ -194,6 +200,26 @@ public class ParkingMainView {
 		}); //Time을 나타내는 Thread End
 		thread.start();// 스레드 - 실시간 시간반영
 	} //makeDateTime() End
+	
+	public void makeTimeImg() //시계 이미지를 상단에 넣는다.
+	{	
+		timeImgIcon = new ImageIcon("시계8.jpg");
+		changeSizeImg = timeImgIcon.getImage();
+		changeSizeImg = changeSizeImg.getScaledInstance(320, 170 , java.awt.Image.SCALE_SMOOTH);
+		timeImgIcon = new ImageIcon(changeSizeImg);
+		
+		timeImgLabel = new JLabel("테스트", timeImgIcon, JLabel.CENTER);
+		timeImgLabel.setBounds(880, 0, 320, 170);
+		
+		//스레드로 구현한 날짜와 시간 출력을 시간 이미지 위에 띄우도록 설정한다.
+		timeImgLabel.add(pDateLabel); //날짜 텍스트를 가진 Label을 timeImg위에 출력 
+		timeImgLabel.add(pTimeLabel); //시간 텍스트를 가진 Label을 timeImg위에 출력
+		pDateLabel.setBounds(15, -20, 300, 100); //년,월,일이 나타나는 Label의 위치 지정 , timeImgLabel위에
+		pTimeLabel.setBounds(15, 60, 300, 100); //시, 분, 초가 나타나는 Label의 위치 지정, timeImgLabel위에
+		
+		
+		parkingMainFullScreen.add(timeImgLabel);
+	}
 	
 	public void makePrintName()
 	{

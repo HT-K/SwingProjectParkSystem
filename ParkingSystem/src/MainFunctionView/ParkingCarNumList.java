@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import Information.ParkCarInfo;
 import StartView.ParkingStartView;
 
-public class ParkingCarNumList {
+public class ParkingCarNumList { //현재 주차된 차량의 리스트를 보여주는 테이블
 	ParkingStartView frame; //ParkingStartView객체의 JFrame을 가져오기 위한 변수
 	//기본적으로 JTable을 사용하는 방법
 	Vector<String> rowData; //주차 목록이 담긴 벡터의 내용을 담기 위한 벡터 변수
@@ -22,7 +22,7 @@ public class ParkingCarNumList {
 	JTable parkJTable; //DefaultTableModel을 담기 위한 JTable변수, JTable의 인자 중 하나가 TableModel이다
 	public static JScrollPane parkScroll; //JTable에 Scroll기능을 달기 위한 JScroll변수, '주차현황'클릭 시 '주차내역'테이블이 보이지 않아야하므로 서로 상호작용하기 위해 static로 설정
 	
-	public ParkingCarNumList (ParkingStartView frame)
+	public ParkingCarNumList (ParkingStartView frame) //현재 주차된 차량의 리스트를 보여주는 테이블
 	{
 		this.frame = frame;
 		
@@ -51,7 +51,7 @@ public class ParkingCarNumList {
 					parkTableModel.removeRow(i);
 				}
 				
-				for (ParkCarInfo car : ParkingCarIn.parkCarList)
+				for (ParkCarInfo car : ParkingCarIn.parkCarList) //차량이 주차된 공간의 인덱스 즉, 층을 구분하기 위해 가져온다.
 				{
 					String carNum = "";
 					if (car.getparkPlaceNum() > 0 && car.getparkPlaceNum() <= 20)
