@@ -43,8 +43,16 @@ public class ParkingStartView extends JFrame {
 	JButton newRegBtn = new JButton("회원가입");
 	JButton notMemBtn = new JButton("비회원");
 	
+	//움직이는 자동차를 위한 컴포넌트들
+	ImageIcon moveCarImgIcon;
+	JLabel moveCarLabel;
+	
+	
 	int memCheck = 0; //관리자와 고객을 구분하기 위한 변수
 	String memName = ""; //회원이면 그 회원의 이름을 System화면에 전달하기 위한 변수
+	
+	int x;
+	int y;
 	
 	public ParkingStartView (String name) //프레임의 이름을 설정하면서 프레임을 생성하는 생성자다!
 	{
@@ -68,6 +76,7 @@ public class ParkingStartView extends JFrame {
 		
 		makeMoveImage(); //맨 처음 로그인 화면에 보이는 차가 움직이는 그림을 구현한 메소드
 		login(); //메인화면 아래에 로그인과 회원가입이 달린 패널 출력
+		new MakeMoveCar(this);
 		setVisible(true); //ParkingStartView가 상속받은 JFrame의 ContentPane On!
 		
 		FileSystem.loadMemberInfo(); //파일에 저장된 회원정보 리스트를 읽어온다.
@@ -160,6 +169,49 @@ public class ParkingStartView extends JFrame {
 		logoImgLabel.setBounds(10, 30, 140, 100); //이미지가 담긴 Label의 크기와 위치 지정
 		loginPanel.add(logoImgLabel); //이미지 Label 패널에 추가
 	} //login() End
+	
+	class MakeMoveCar {
+		ParkingStartView frame;
+		int x;
+		int y;
+		//Graphics gImg = carImg.getGraphics();
+		ImageIcon carImgIcon = new ImageIcon("로고1.png");
+		Image carImg = carImgIcon.getImage();
+		public MakeMoveCar(ParkingStartView frame)
+		{
+			this.frame = frame;
+			
+			repaint();
+		}
+		
+		public void paint(Graphics g)
+		{
+			if (carImg == null)
+			{
+				return;
+			}
+			g.drawImage(carImg, 500,500, frame);
+		}
+		
+		/*Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				x = (int)(Math.random() * 1200);
+				y = (int)(Math.random() * 700);
+				
+				gImg.drawLine(x, y, x, y);
+				repaint();
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});*/
+	}
 	
 	class LoginAction implements ActionListener //'로그인'버튼 클릭 시
 	{
