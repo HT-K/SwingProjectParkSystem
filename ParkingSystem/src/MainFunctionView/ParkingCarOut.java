@@ -35,6 +35,7 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 	JLabel rfCarTypeLabel = new JLabel(); //차량 종류 출력 Label
 	JLabel rfCarNumLabel = new JLabel(); //차량 번호 출력 Label
 	JLabel rfParkFeeLabel = new JLabel(); //주차 요금 출력 Label
+	JLabel rfParkTimeLabel = new JLabel();
 	JButton rfOkButton = new JButton("출차확인");
 	
 	int memCheck = 0;
@@ -76,12 +77,12 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 	public void makeResultOutDialog()
 	{
 		resultOutDialog = new JDialog(frame, "차량 출고 완료");
-		resultOutDialog.setBounds(frame.getWidth() / 2, frame.getHeight() / 2, 200, 200);
+		resultOutDialog.setBounds(frame.getWidth() / 2, frame.getHeight() / 2, 200, 250);
 		resultOutDialog.add(resultFullPanel); //출차 확인 다이어로그를 구성한 패널 add
-		resultFullPanel.setSize(new Dimension(200, 200));
+		//resultFullPanel.setSize(new Dimension(200, 200));
 		
 		resultFullPanel.add(rfTitleLabel); //다이어로그 제목 Label
-		rfTitleLabel.setBounds(25, 0, 150, 20);
+		rfTitleLabel.setBounds(15, 0, 150, 20);
 		
 		resultFullPanel.add(rfCarTypeLabel); //차량 종류 출력 Label
 		rfTitleLabel.setBounds(45, 30, 150, 20);
@@ -92,8 +93,11 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 		resultFullPanel.add(rfParkFeeLabel); //주차 요금 출력 Label
 		rfParkFeeLabel.setBounds(45, 90, 150, 20);
 		
+		resultFullPanel.add(rfParkTimeLabel); //주차 시간 출력 Label
+		rfParkTimeLabel.setBounds(45, 120, 150, 20);
+		
 		resultFullPanel.add(rfOkButton); //'출차결과확인'버튼
-		rfOkButton.setBounds(40, 125, 100, 30);
+		rfOkButton.setBounds(40, 150, 100, 30);
 		
 		resultOutDialog.setVisible(true);
 	} //makeResultOutDialog() End
@@ -124,6 +128,7 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 			// TODO Auto-generated method stub
 			ParkCarInfo park = null;
 			int resultFee = 0; //요금을 저장하기 위한 변수
+			int resultMinute = 0; //총 주차시간을 저장하기 위한 변수
 			int flag = 0; //트리맵 안의 차량번호 중 텍스트필드에서 입력받은 내용과 같은 것이 있는지 없는지 검사, 0이면 없고 1이면 찾은것
 			for (ParkCarInfo car : ParkingCarIn.parkCarList)
 			{
@@ -136,7 +141,7 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 			}
 			
 			try { //번호 입력창에 숫자가 아닌 문자 입력 시 오류창을 띄우기 위한 try-catch문
-                int check = Integer.parseInt(inputNumText.getText());
+                int check = Integer.parseInt(inputNumText.getText()); //텍스트필드에 숫자가아닌 문자가 있으면 int형 변수에 저장이 안된다. 이 때 Exception(예외)가 발생한다.
             } catch (Exception ae) {
                 JOptionPane.showMessageDialog(null, "문자는 입력하시면 안돼요~", "숫자를 입력하세요.", 0);
                 inputNumText.setText("");
@@ -173,6 +178,9 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 				long carOutTime = presentTime.getTimeInMillis(); //출차 등록 한  시간을 초로 바꿔서 저장
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String time = format.format(presentTime.getTime()); //프린트 하기 위해 parkPring 벡터에 저장
+				
+				resultMinute = calculateMinute(park.getCarInTime(), carOutTime); //총 몇분을 주차했는지 구하는 메소드다
+				rfParkTimeLabel.setText("주차시간 : " + resultMinute + "분");
 				
 				if (park.getMemOrNotmem() == true) //관리자는 memCheck가 1인데 주차요금 정산 시 회원 혹은 비회원과 같은 요금으로 계산되어야한다.
 				{
@@ -289,4 +297,13 @@ public class ParkingCarOut extends JOptionPane implements ActionListener {
 		}
 		return resultFee;
 	} //calculateFee() End
+	
+	int calculateMinute(long carIntime, long carOutTime) //총 주차 시간을 '분'으로 출력하기 위해 그 시간을 구하는 메소드
+	{
+		int resultMinute = 0;
+		
+		resultMinute = (int)(carOutTime - carIntime) / 60000; //출차 시간(초) - 입차 시간(초)를 하면 주차 시간(초)을 구할 수 있다. 여기세 60000으로 나누면 '분'으로 된 총 주차시간이 구해진다.
+		
+		return resultMinute;
+	} //calculateMinute() End
 } //ParkingCarOut class End

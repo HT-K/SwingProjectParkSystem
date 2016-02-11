@@ -189,7 +189,7 @@ public class ParkingMainView {
 					Calendar presentTime = Calendar.getInstance(); //현재 시간을 가져온다.
 					SimpleDateFormat format = new SimpleDateFormat("   HH      mm  ss"); //시간 출력 형식 지정
 					try {
-						String date = presentTime.get(Calendar.YEAR) + "      " + (presentTime.get(Calendar.MONTH) + 1) + "      " + presentTime.get(Calendar.DATE) + ""; //가져온 시간의 연도, 월, 일을 저장한다.
+						String date = presentTime.get(Calendar.YEAR) + "       " + (presentTime.get(Calendar.MONTH) + 1) + "     " + presentTime.get(Calendar.DATE) + ""; //가져온 시간의 연도, 월, 일을 저장한다.
 						String time = format.format(presentTime.getTime()); //현재 시간을 가져와서 format1형식에 맞게 String에 저장
 						pDateLabel.setText(date); //pDate Label에 연월일 출력
 						pTimeLabel.setText(time); //pTime Label에 시간 출력
