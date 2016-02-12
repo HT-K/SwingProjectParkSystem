@@ -10,7 +10,6 @@ public class MemberInfo implements Serializable{ //회원정보를 저장하기 위한 클래
 	private String name;
 	private String phone;
 	private String email;
-	private boolean parkInOut;
 	
 	public MemberInfo (int memCheck, String id, String password, String name, String phone, String email)
 	{
@@ -44,13 +43,5 @@ public class MemberInfo implements Serializable{ //회원정보를 저장하기 위한 클래
 
 	public String getEmail() {
 		return email;
-	}
-	
-	public void setParkInOut(boolean parkInOut) { //주차를 했는지 안했는지 true of false로 구분한다.
-		this.parkInOut = parkInOut;
-	}
-	
-	public boolean getParkInOut() {
-		return parkInOut;
 	}
 }
