@@ -54,8 +54,11 @@ public class ParkingStartView extends JFrame {
 	
 	//로그인 버튼과 회원가입 버튼
 	JButton loginBtn = new JButton("로그인");
+	ImageIcon loginIcon = new ImageIcon("로그인.jpg");
 	JButton newRegBtn = new JButton("회원가입");
+	ImageIcon regIcon = new ImageIcon("회원가입.jpg");
 	JButton notMemBtn = new JButton("비회원");
+	ImageIcon notMemIcon = new ImageIcon("비회원.jpg");
 	
 	int memCheck = 0; //관리자와 고객을 구분하기 위한 변수
 	String memName = ""; //회원이면 그 회원의 이름을 System화면에 전달하기 위한 변수
@@ -213,14 +216,22 @@ public class ParkingStartView extends JFrame {
 		loginPanel.add(passwordText);
 		
 		loginBtn.setBounds(160, 131, 75, 35); //로그인 버튼
-		loginBtn.setBackground(new Color(0xEEEEEE));
-		loginBtn.setFont(new Font("굴림", Font.BOLD, 10));
-		newRegBtn.setBounds(242, 131, 78, 35); //회원가입 버튼
-		newRegBtn.setBackground(new Color(0xEEEEEE)); 
-		newRegBtn.setFont(new Font("굴림", Font.BOLD, 10));
+		//loginBtn.setBackground(new Color(0xEEEEEE));
+		//loginBtn.setFont(new Font("굴림", Font.BOLD, 10));
+		loginIcon = changeSize(loginIcon); //로그인버튼에 들어갈 이미지의 크기를 메소드를 통해 변화시키고 받아온다.
+		loginBtn.setIcon(loginIcon); //로그인 버튼에 이미지를 넣는다.
+		
+		newRegBtn.setBounds(242, 131, 75, 35); //회원가입 버튼
+		//newRegBtn.setBackground(new Color(0xEEEEEE)); 
+		//newRegBtn.setFont(new Font("굴림", Font.BOLD, 10));
+		regIcon = changeSize(regIcon); //회원가입 버튼에 들어갈 이미지의 크기 조정
+		newRegBtn.setIcon(regIcon); //회원가입 버튼에 이미지 삽입
+		
 		notMemBtn.setBounds(328, 131, 75, 35); //비회원 버튼
-		notMemBtn.setBackground(new Color(0xEEEEEE));
-		notMemBtn.setFont(new Font("굴림", Font.BOLD, 10));
+		//notMemBtn.setBackground(new Color(0xEEEEEE));
+		//notMemBtn.setFont(new Font("굴림", Font.BOLD, 10));
+		notMemIcon = changeSize(notMemIcon); //비회원 버튼에 들어갈 이미지의 크기 조정
+		notMemBtn.setIcon(notMemIcon); //비회원 버튼에 이미지 삽입
 		
 		//각 버튼 패널에 추가
 		loginPanel.add(loginBtn);
@@ -236,6 +247,14 @@ public class ParkingStartView extends JFrame {
 		logoImgLabel.setBounds(10, 30, 140, 100); //이미지가 담긴 Label의 크기와 위치 지정
 		loginPanel.add(logoImgLabel); //이미지 Label 패널에 추가
 	} //login() End
+	
+	public ImageIcon changeSize(ImageIcon imgIcon) //로그인 패널 버튼들의 이미지를 변환시키는 메소드다.
+	{
+		Image chaImg = imgIcon.getImage();
+		chaImg = chaImg.getScaledInstance(86,35, java.awt.Image.SCALE_SMOOTH);
+		imgIcon = new ImageIcon(chaImg);
+		return imgIcon;
+	}
 	
 	class LoginAction implements ActionListener //'로그인'버튼 클릭 시
 	{
