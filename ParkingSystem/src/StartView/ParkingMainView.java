@@ -44,8 +44,8 @@ public class ParkingMainView {
 	//ActionEvent에 쓰일 버튼을 저장한 JButton클래스의 객체 배열 선언 ,출차할 때 쓰기위해 static으로 선언
 	public static JButton[] parkButton = new JButton[60];
 	
-	//주차공간의 버튼 생성 후 다음 라인에 넣는 Label을 설정하기 위한 Label
-	JLabel[] parkLabel = new JLabel[3];
+	//각 주차공간 버튼 다음의 Label들을 저장할 배열 선언
+	JLabel parkLabel;
 	
 	//동쪽에 테이블, 버튼을 생성한다.
 	JPanel buttonFullPanel = new JPanel(null); //버튼 들을 담기 위한 패널
@@ -208,7 +208,7 @@ public class ParkingMainView {
 		changeSizeImg = changeSizeImg.getScaledInstance(320, 170 , java.awt.Image.SCALE_SMOOTH);
 		timeImgIcon = new ImageIcon(changeSizeImg);
 		
-		timeImgLabel = new JLabel("테스트", timeImgIcon, JLabel.CENTER);
+		timeImgLabel = new JLabel("테스트", timeImgIcon, JLabel.CENTER); //Label을 생성하고 그 안에 시계 Image를 삽입한다.
 		timeImgLabel.setBounds(880, 0, 320, 170);
 		
 		//스레드로 구현한 날짜와 시간 출력을 시간 이미지 위에 띄우도록 설정한다.
@@ -216,7 +216,6 @@ public class ParkingMainView {
 		timeImgLabel.add(pTimeLabel); //시간 텍스트를 가진 Label을 timeImg위에 출력
 		pDateLabel.setBounds(15, -20, 300, 100); //년,월,일이 나타나는 Label의 위치 지정 , timeImgLabel위에
 		pTimeLabel.setBounds(15, 60, 300, 100); //시, 분, 초가 나타나는 Label의 위치 지정, timeImgLabel위에
-		
 		
 		parkingMainFullScreen.add(timeImgLabel);
 	}
@@ -269,7 +268,7 @@ public class ParkingMainView {
 		}); //nextButton event End
 		
 		int buttonCount = 1; //각 버튼 배열의 인덱스를 지정하기 위한 변수
-		int labelCount = 0;
+		int labelCount = 1; //라벨 배열의 각 인덱스를 저장하기 위한 변수
 		for (int f = 0; f < parkFloorPanel.length; f++) //각 층에 주차공간을 버튼과 라벨로 구현
 		{
 			for (int i = 0; i < 3; i++)

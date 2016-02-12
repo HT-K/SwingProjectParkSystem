@@ -21,12 +21,23 @@ import javax.swing.border.LineBorder;
 public class ParkingStartView extends JFrame {
 	Container frameContentPane; //전체화면인 프레임 위에 이미 생성되어 있는 컨텐트팬을 저장하기 위함, 이 컨텐트팬 위에서 GUI컴포넌트를 부착해야한다. (유의!)
 	
+	//주차 로고 이미지가 움직이게 하기 위한 변수
+	JLabel moveLabel = new JLabel();
+	int x;
+	int y;
+	int xdir;
+	int ydir;
+	ImageIcon moveCarImgIcon;
+	Image moveCarImg;
+	Thread thread2;
+	boolean thread2Flag = true; //다음화면으로 넘어갈 때 실행중인 스레드를 정지시키고 넘어가게한다.
+	
 	//처음 로그인 화면 상단에 이미지를 넣기 위한 변수들
 	//자동차 이미지를 1초마다 띄우게 하기 위한 변수
 	JLabel carImgLabel = new JLabel();
 	ImageIcon carImgIcon[] = new ImageIcon[3]; //이미지를 가져올 ImageIcon배열 선언
-	Thread thread;
-	boolean threadFlag = true; //다음화면으로 넘어갈 때 실행중인 스레드를 정지시키고 넘어가게한다.
+	Thread thread1;
+	boolean thread1Flag = true; //다음화면으로 넘어갈 때 실행중인 스레드를 정지시키고 넘어가게한다.
 	
 	//로그인 창 왼쪽에 넣을 로고이미지
 	JLabel logoImgLabel = new JLabel();
@@ -70,7 +81,7 @@ public class ParkingStartView extends JFrame {
 		
 		makeMoveImage(); //맨 처음 로그인 화면에 보이는 차가 움직이는 그림을 구현한 메소드
 		login(); //메인화면 아래에 로그인과 회원가입이 달린 패널 출력
-		new MakeMoveCar(this); //로그인 화면에서 자동차 로고 이미지가 자동으로 움직이게 하는 클래스의 객체를 생성한다.
+		MakeMoveCar(); //로그인 화면에서 자동차 로고 이미지가 자동으로 움직이게 하는 클래스의 객체를 생성한다.
 
 		setVisible(true); //ParkingStartView가 상속받은 JFrame의 ContentPane On!
 		
@@ -93,6 +104,58 @@ public class ParkingStartView extends JFrame {
 		}
 	} //ParkingStartView 생성자 End
 	
+	public void MakeMoveCar() //로고 이미지가 프레임 화면 안에서 움직이게 하는 메소드
+	{
+		//로고 이미지를 담은 Label을 움직이게 하기 위한 좌표 설정 값들이다.
+		x = 0;
+		y = 0;
+		xdir = 1;
+		ydir = 2;
+		
+		frameContentPane.add(moveLabel); //현재 프레임의 컨텐트 팬에 로고 이미지를 담는 Label을 add한다.
+		moveLabel.setBounds(x, y, 180, 130); //로고 이미지를 담은 Label의 위치와 크기 지정
+		moveCarImgIcon = new ImageIcon("로고1.png"); //로고 이미지를 가져와서
+		moveCarImg = moveCarImgIcon.getImage(); //Image객체 변수에 담아 사이즈를 조정
+		moveCarImg = moveCarImg.getScaledInstance(180,130, java.awt.Image.SCALE_SMOOTH); //이미지 사이즈 조정
+		moveCarImgIcon = new ImageIcon(moveCarImg);  //사이즈를 조정한 이미지를 다시 담아온다.
+		moveLabel.setIcon(moveCarImgIcon); //Label에 이미지를 넣는다.
+		
+		thread2 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (thread2Flag)
+				{
+					// TODO Auto-generated method stub
+					/*x = (int)(Math.random() * 1200);
+					y = (int)(Math.random() * 700);
+					i = (int)(Math.random() * 1200);
+					j = (int)(Math.random() * 700);*/
+					
+					if (x < 0 || x > frameContentPane.getWidth()) //width와 height의 위치를 프레임 크기만큼으로 지정해서 화면 밖으로 나가는 일이 없도록한다.
+					{
+						xdir *= -1;
+					}
+					if (y < 0 || y > frameContentPane.getHeight())
+					{
+						ydir *= -1;
+					}
+					x += xdir;
+					y += ydir;
+
+					moveLabel.setLocation(x, y); //이미지를 담은 Label이 프레임 화면에서 왔다 갔다 하게 설정한다.
+					//moveLabel.setLocation(i, j);
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		thread2.start();
+	} //MakeMoveCar() End
+	
 	public void makeMoveImage() 
 	{
 		for (int i = 0; i < carImgIcon.length; i++)
@@ -102,10 +165,10 @@ public class ParkingStartView extends JFrame {
 		carImgLabel.setBounds(312, 56, 800, 300); //라벨 위치와 크기 (이미지의 크기도 라벨의 크기만큼 바뀐다.)
 		frameContentPane.add(carImgLabel); //컨텐트팬에 이미지넣을 라벨 추가
 		
-		thread = new Thread(new Runnable() { //첫 화면에 자동차 지나가게 하는 스레드
+		thread1 = new Thread(new Runnable() { //첫 화면에 자동차 지나가게 하는 스레드
 			@Override
 			public void run() {
-				while (threadFlag)
+				while (thread1Flag)
 				{
 					for (int i = 0; i < carImgIcon.length; i++)
 					{
@@ -117,7 +180,7 @@ public class ParkingStartView extends JFrame {
 				}
 			}
 		});
-		thread.start(); //이미지 체인지 스레드 시작!
+		thread1.start(); //이미지 체인지 스레드 시작!
 	} //makeMoveImage() End
 	
 	public void login() //아이디와 비밀번호를 입력하는 로그인 창을 구성한다.
@@ -165,125 +228,6 @@ public class ParkingStartView extends JFrame {
 		loginPanel.add(logoImgLabel); //이미지 Label 패널에 추가
 	} //login() End
 	
-	
-	/*public void MakeMoveCar()
-	{
-		JLabel moveLabel = new JLabel();
-		int x = 0;
-		int y = 0;
-		int xdir = 1;
-		int ydir = 2;
-		int i = 0;
-		int j = 0;
-		
-		ImageIcon moveCarImgIcon;
-		Image moveCarImg;
-		
-		frameContentPane.add(moveLabel);
-		moveLabel.setBounds(x, y, 140, 100);
-		moveCarImgIcon = new ImageIcon("로고1.png");	
-		moveCarImg = moveCarImgIcon.getImage();
-		moveCarImg = moveCarImg.getScaledInstance(140,100, java.awt.Image.SCALE_SMOOTH);
-		moveCarImgIcon = new ImageIcon(moveCarImg);
-		moveLabel.setIcon(moveCarImgIcon);
-		
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true)
-				{
-					// TODO Auto-generated method stub
-					x = (int)(Math.random() * 1200);
-					y = (int)(Math.random() * 700);
-					i = (int)(Math.random() * 1200);
-					j = (int)(Math.random() * 700);
-					if (x < 0 || x > frameContentPane.getWidth())
-					{
-						xdir *= -1;
-					}
-					if (y < 0 || y > frameContentPane.getHeight())
-					{
-						ydir *= -1;
-					}
-					x += xdir;
-					y += ydir;
-
-					moveLabel.setLocation(x, y);
-					//moveLabel.setLocation(i, j);
-					try {
-						Thread.sleep(30);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		thread.start();
-	}*/
-	
-	class MakeMoveCar { //로그인 화면에 로고 이미지가 움직이게 하는 클래스다.
-		ParkingStartView frame;
-		JLabel moveLabel = new JLabel();
-		int x = 0;
-		int y = 0;
-		int xdir = 1;
-		int ydir = 2;
-		int i = 0;
-		int j = 0;
-		
-		ImageIcon moveCarImgIcon;
-		Image moveCarImg;
-
-		public MakeMoveCar(ParkingStartView frame)
-		{
-			this.frame = frame;
-			frame.add(moveLabel);
-			moveLabel.setBounds(x, y, 140, 100);
-			moveLabel.setVisible(true);
-			
-			moveCarImgIcon = new ImageIcon("로고1.png");	
-			moveCarImg = moveCarImgIcon.getImage();
-			moveCarImg = moveCarImg.getScaledInstance(140,100, java.awt.Image.SCALE_SMOOTH);
-			moveCarImgIcon = new ImageIcon(moveCarImg);
-			moveLabel.setIcon(moveCarImgIcon);
-			
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					while (true)
-					{
-						// TODO Auto-generated method stub
-						/*x = (int)(Math.random() * 1200);
-						y = (int)(Math.random() * 700);
-						i = (int)(Math.random() * 1200);
-						j = (int)(Math.random() * 700);*/
-						if (x < 0 || x > frame.getWidth())
-						{
-							xdir *= -1; //화면의 바깥으로 나가는 경우 다시 돌아오게 하기 위함
-						}
-						if (y < 0 || y > frame.getHeight())
-						{
-							ydir *= -1; //화면의 바깥으로 나가는 경우 다시 돌아오게 하기 위함
-						}
-						x += xdir;
-						y += ydir;
-
-						moveLabel.setLocation(x, y); //이미지를 담은 Label의 위치가 계속 바뀐다.
-						//moveLabel.setLocation(i, j);
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			});
-			thread.start();
-		}
-	} //MakeMoveCar class End
-	
 	class LoginAction implements ActionListener //'로그인'버튼 클릭 시
 	{
 		@Override
@@ -319,7 +263,8 @@ public class ParkingStartView extends JFrame {
 			}
 			else //텍스트필드에 입력한 id와 password가 둘다 정확하면 다음화면으로 넘어가게 설정한다. 그전에 로그인 화면에 있는 이미지를 동작하게 하는 스레드를 정지시킨다.
 			{
-				threadFlag = false; //화면 자동차 그림 스레드를 정지시킨다. 다음화면은 이게 돌아갈 필요가 없다.
+				thread1Flag = false; //화면 자동차 그림 스레드를 정지시킨다. 다음화면은 이게 돌아갈 필요가 없다.
+				thread2Flag = false; //주차 로고 이미지를 움직이는 스레드를 정지시킨다. 다음화면은 이게 돌아갈 필요가 없다.
 				new ParkingMainView(ParkingStartView.this, memCheck, memName); //현재 프레임을 ParkingSystem으로 전달한다. 현재 클래스 안이라서 프레임을 보내려면 클래스명.this를 해야한다. 클래스 밖이면 this로 써도 상관없다. 
 				//memCheck 변수를 같이 보내 관리자와 고객의 화면을 구분짓는다. (1은 관리자, 2는 회원, 3은 비회원이다)
 			}
@@ -331,8 +276,9 @@ public class ParkingStartView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			threadFlag = false; //화면 자동차 그림 스레드를 정지시킨다. 다음화면은 이게 돌아갈 필요가 없다.
-			memCheck = 3;
+			thread1Flag = false; //화면 자동차 그림 스레드를 정지시킨다. 다음화면은 이게 돌아갈 필요가 없다.
+			thread2Flag = false; //주차 로고 이미지를 움직이는 스레드를 정지시킨다. 다음화면은 이게 돌아갈 필요가 없다.
+			memCheck = 3; //비회원은 멤버번호가 3번이다!
 			memName = "비회원";
 			new ParkingMainView(ParkingStartView.this, memCheck, memName);
 		}
