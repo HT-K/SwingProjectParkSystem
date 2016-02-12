@@ -19,6 +19,7 @@ import Information.*;
 import javax.swing.border.LineBorder;
 
 public class ParkingStartView extends JFrame {
+	ParkingStartView frame;
 	Container frameContentPane; //전체화면인 프레임 위에 이미 생성되어 있는 컨텐트팬을 저장하기 위함, 이 컨텐트팬 위에서 GUI컴포넌트를 부착해야한다. (유의!)
 	
 	//주차 로고 이미지가 움직이게 하기 위한 변수
@@ -58,6 +59,11 @@ public class ParkingStartView extends JFrame {
 	
 	int memCheck = 0; //관리자와 고객을 구분하기 위한 변수
 	String memName = ""; //회원이면 그 회원의 이름을 System화면에 전달하기 위한 변수
+	
+	public ParkingStartView()
+	{
+		this("주차관리시스템"); //로그아웃 클릭 시 그 프레임은 없어지고 다시 새로운 프레임을 생성해서 사용자에게 보여준다.
+	} //ParkingStartView() 생성자 End
 	
 	public ParkingStartView (String name) //프레임의 이름을 설정하면서 프레임을 생성하는 생성자다!
 	{
@@ -113,37 +119,40 @@ public class ParkingStartView extends JFrame {
 		ydir = 2;
 		
 		frameContentPane.add(moveLabel); //현재 프레임의 컨텐트 팬에 로고 이미지를 담는 Label을 add한다.
-		moveLabel.setBounds(x, y, 180, 130); //로고 이미지를 담은 Label의 위치와 크기 지정
+		moveLabel.setBounds(x, y, 80, 80); //로고 이미지를 담은 Label의 위치와 크기 지정
 		moveCarImgIcon = new ImageIcon("로고1.png"); //로고 이미지를 가져와서
 		moveCarImg = moveCarImgIcon.getImage(); //Image객체 변수에 담아 사이즈를 조정
-		moveCarImg = moveCarImg.getScaledInstance(180,130, java.awt.Image.SCALE_SMOOTH); //이미지 사이즈 조정
+		moveCarImg = moveCarImg.getScaledInstance(80,80, java.awt.Image.SCALE_SMOOTH); //이미지 사이즈 조정
 		moveCarImgIcon = new ImageIcon(moveCarImg);  //사이즈를 조정한 이미지를 다시 담아온다.
 		moveLabel.setIcon(moveCarImgIcon); //Label에 이미지를 넣는다.
 		
 		thread2 = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (thread2Flag)
+				while (thread2Flag) //Flag가 true일때만 스레드가 실행된다.
 				{
-					// TODO Auto-generated method stub
-					/*x = (int)(Math.random() * 1200);
-					y = (int)(Math.random() * 700);
-					i = (int)(Math.random() * 1200);
-					j = (int)(Math.random() * 700);*/
+					// TODO Auto-generated method stub									
+					if (x == 0) //왼쪽 위에서 아래로 이미지 이동
+					{
+						y += ydir;
+					}
 					
-					if (x < 0 || x > frameContentPane.getWidth()) //width와 height의 위치를 프레임 크기만큼으로 지정해서 화면 밖으로 나가는 일이 없도록한다.
+					if (y == 590) //왼쪽 아래에서 오른쪽으로 이미지 이동
 					{
-						xdir *= -1;
+						x += xdir;
 					}
-					if (y < 0 || y > frameContentPane.getHeight())
+					
+					if (x == 1115) //오른쪽 아래에서 위로 이미지 이동
 					{
-						ydir *= -1;
+						y -= ydir;
 					}
-					x += xdir;
-					y += ydir;
+					
+					if (y == 0) //오른쪽 위에서 왼쪽으로 이미지 이동
+					{
+						x -= xdir;
+					}
 
 					moveLabel.setLocation(x, y); //이미지를 담은 Label이 프레임 화면에서 왔다 갔다 하게 설정한다.
-					//moveLabel.setLocation(i, j);
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -162,7 +171,7 @@ public class ParkingStartView extends JFrame {
 		{
 			carImgIcon[i] = new ImageIcon("car"+(i+1)+".png"); //ImgIcon에 각각의 이미지를 집어넣는다.
 		}
-		carImgLabel.setBounds(312, 56, 800, 300); //라벨 위치와 크기 (이미지의 크기도 라벨의 크기만큼 바뀐다.)
+		carImgLabel.setBounds(312, 80, 800, 280); //라벨 위치와 크기 (이미지의 크기도 라벨의 크기만큼 바뀐다.)
 		frameContentPane.add(carImgLabel); //컨텐트팬에 이미지넣을 라벨 추가
 		
 		thread1 = new Thread(new Runnable() { //첫 화면에 자동차 지나가게 하는 스레드
@@ -187,7 +196,7 @@ public class ParkingStartView extends JFrame {
 	{
 		loginPanel.setForeground(Color.WHITE);
 		loginPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));
-		loginPanel.setBounds(396, 415, 420, 200);  //아래 버튼과 라벨, 텍스트를 담기 위한 패널 위치 설정, (x위치, y위치, width크기, height크기)
+		loginPanel.setBounds(396, 395, 420, 200);  //아래 버튼과 라벨, 텍스트를 담기 위한 패널 위치 설정, (x위치, y위치, width크기, height크기)
 		loginPanel.setBackground(Color.WHITE);
 		frameContentPane.add(loginPanel); //로그인 화면을 담을 패널 지정
 		idLable.setFont(new Font("굴림", Font.BOLD, 13));

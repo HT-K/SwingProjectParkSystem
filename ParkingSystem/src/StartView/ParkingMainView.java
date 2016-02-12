@@ -60,6 +60,7 @@ public class ParkingMainView {
 	//회원의 이름을 시간 밑에 출력 시킨다.
 	JLabel memNameLabel = new JLabel();
 	JLabel afterNameLabel = new JLabel();
+	JButton logoutBtn = new JButton("로그아웃"); //로그아웃 버튼, 누르면 로그인 화면으로 넘어간다.
 	
 	//주차 메뉴 테이블
 	String[] colName = {"차종류", "회원", "비회원"}; //열에 나타날 목록 제목들!
@@ -89,6 +90,7 @@ public class ParkingMainView {
 		feeCalcButton.addActionListener(new ParkingFeeList(frame)); //'요금정산'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
 		parkListButton.addActionListener(new ParkingCarList(frame)); //'주차내역'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
 		parkState.addActionListener(new ParkingCarState(frame, memCheck)); //'주차현황'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 객체 생성
+		logoutBtn.addActionListener(new ParkingLogout());
 		
 		//파일에 저장된 내용들을 전부 불러온다.
 		FileSystem.loadCarInfo(); //파일에 저장된 차량정보 리스트를 읽어온다.
@@ -205,11 +207,11 @@ public class ParkingMainView {
 	{	
 		timeImgIcon = new ImageIcon("시계6.jpg");
 		changeSizeImg = timeImgIcon.getImage();
-		changeSizeImg = changeSizeImg.getScaledInstance(320, 170 , java.awt.Image.SCALE_SMOOTH);
+		changeSizeImg = changeSizeImg.getScaledInstance(320, 155 , java.awt.Image.SCALE_SMOOTH);
 		timeImgIcon = new ImageIcon(changeSizeImg);
 		
 		timeImgLabel = new JLabel("테스트", timeImgIcon, JLabel.CENTER); //Label을 생성하고 그 안에 시계 Image를 삽입한다.
-		timeImgLabel.setBounds(880, 0, 320, 170);
+		timeImgLabel.setBounds(880, -10, 320, 170);
 		
 		//스레드로 구현한 날짜와 시간 출력을 시간 이미지 위에 띄우도록 설정한다.
 		timeImgLabel.add(pDateLabel); //날짜 텍스트를 가진 Label을 timeImg위에 출력 
@@ -223,15 +225,18 @@ public class ParkingMainView {
 	public void makePrintName()
 	{
 		//회원의 이름을 시스템에 출력시킨다.
-		memNameLabel.setBounds(950, 170, 50, 30);
-		parkingMainFullScreen.add(memNameLabel);
+		parkingMainFullScreen.add(memNameLabel); //회원 이름이 들어가는 Label
+		memNameLabel.setBounds(900, 160, 50, 30);
 		memNameLabel.setText(memName);
 		memNameLabel.setFont(new Font("고딕", Font.BOLD, 15));
 		memNameLabel.setForeground(Color.BLUE);
 		
-		afterNameLabel.setBounds(1000, 170, 230, 30);
-		parkingMainFullScreen.add(afterNameLabel);
+		parkingMainFullScreen.add(afterNameLabel); //회원이름뒤에 들어가는 내용이 들어가는 Label
+		afterNameLabel.setBounds(950, 160, 130, 30);
 		afterNameLabel.setText("님 접속을 환영합니다.");
+		
+		parkingMainFullScreen.add(logoutBtn); //로그아웃 버튼
+		logoutBtn.setBounds(1090, 160, 100, 30);
 	} //makePrintName() End
 	
 	public void makeParkPlaceBtn() //주차공간 버튼을 구현하는 메소드다. 1~3층으로 구성했으며 버튼 클릭시 같은 공간에 같은 버튼들이 보여야해서 CardLayout으로 설정했다.
@@ -334,4 +339,15 @@ public class ParkingMainView {
 		buttonFullPanel.add(nextButton); //'다음층'버튼
 		nextButton.setBounds(165, 140, 140, 60);
 	} //makeSystemBtn() End
+	
+	class ParkingLogout implements ActionListener //로그아웃 버튼 클릭 시 이벤트를 처리하는 핸들러
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			frame.dispose(); //현재 프레임을 종료시킨다. dispose()는 종료시켜주는 메소드이다.
+			new ParkingStartView(); //다시 로그인 화면이 사용자에게 보이도록 새로운 프레임을 생성한다.
+		}
+	} //ParkingLogout class End
+	
 } //ParkingMainView class End
