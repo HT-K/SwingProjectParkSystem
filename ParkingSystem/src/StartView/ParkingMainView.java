@@ -203,7 +203,7 @@ public class ParkingMainView {
 	
 	public void makeTimeImg() //시계 이미지를 상단에 넣는다.
 	{	
-		timeImgIcon = new ImageIcon("시계8.jpg");
+		timeImgIcon = new ImageIcon("시계6.jpg");
 		changeSizeImg = timeImgIcon.getImage();
 		changeSizeImg = changeSizeImg.getScaledInstance(320, 170 , java.awt.Image.SCALE_SMOOTH);
 		timeImgIcon = new ImageIcon(changeSizeImg);

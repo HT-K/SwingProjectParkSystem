@@ -8,10 +8,8 @@ import java.io.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -50,9 +48,6 @@ public class ParkingStartView extends JFrame {
 	int memCheck = 0; //관리자와 고객을 구분하기 위한 변수
 	String memName = ""; //회원이면 그 회원의 이름을 System화면에 전달하기 위한 변수
 	
-	int x;
-	int y;
-	
 	public ParkingStartView (String name) //프레임의 이름을 설정하면서 프레임을 생성하는 생성자다!
 	{
 		super(name); //프레임 생성시 제목을 주기위함, ParkingStart에서 new ParkingLogin() 생성 시 제목추가!
@@ -75,29 +70,7 @@ public class ParkingStartView extends JFrame {
 		
 		makeMoveImage(); //맨 처음 로그인 화면에 보이는 차가 움직이는 그림을 구현한 메소드
 		login(); //메인화면 아래에 로그인과 회원가입이 달린 패널 출력
-		
-		/*MakeMoveCar mc = new MakeMoveCar(ParkingStartView.this);
-		frameContentPane.add(mc);
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				x = (int)(Math.random() * 1200);
-				y = (int)(Math.random() * 700);
-				
-				mc.repaint();
-				//mc.setLocation(x, y);
-				mc.setBounds(x, y, 140, 100);
-				//repaint();
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();*/
+		new MakeMoveCar(this); //로그인 화면에서 자동차 로고 이미지가 자동으로 움직이게 하는 클래스의 객체를 생성한다.
 
 		setVisible(true); //ParkingStartView가 상속받은 JFrame의 ContentPane On!
 		
@@ -192,10 +165,72 @@ public class ParkingStartView extends JFrame {
 		loginPanel.add(logoImgLabel); //이미지 Label 패널에 추가
 	} //login() End
 	
-	/*class MakeMoveCar extends JLabel {
+	
+	/*public void MakeMoveCar()
+	{
+		JLabel moveLabel = new JLabel();
+		int x = 0;
+		int y = 0;
+		int xdir = 1;
+		int ydir = 2;
+		int i = 0;
+		int j = 0;
+		
+		ImageIcon moveCarImgIcon;
+		Image moveCarImg;
+		
+		frameContentPane.add(moveLabel);
+		moveLabel.setBounds(x, y, 140, 100);
+		moveCarImgIcon = new ImageIcon("로고1.png");	
+		moveCarImg = moveCarImgIcon.getImage();
+		moveCarImg = moveCarImg.getScaledInstance(140,100, java.awt.Image.SCALE_SMOOTH);
+		moveCarImgIcon = new ImageIcon(moveCarImg);
+		moveLabel.setIcon(moveCarImgIcon);
+		
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true)
+				{
+					// TODO Auto-generated method stub
+					x = (int)(Math.random() * 1200);
+					y = (int)(Math.random() * 700);
+					i = (int)(Math.random() * 1200);
+					j = (int)(Math.random() * 700);
+					if (x < 0 || x > frameContentPane.getWidth())
+					{
+						xdir *= -1;
+					}
+					if (y < 0 || y > frameContentPane.getHeight())
+					{
+						ydir *= -1;
+					}
+					x += xdir;
+					y += ydir;
+
+					moveLabel.setLocation(x, y);
+					//moveLabel.setLocation(i, j);
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		thread.start();
+	}*/
+	
+	class MakeMoveCar { //로그인 화면에 로고 이미지가 움직이게 하는 클래스다.
 		ParkingStartView frame;
-		int x;
-		int y;
+		JLabel moveLabel = new JLabel();
+		int x = 0;
+		int y = 0;
+		int xdir = 1;
+		int ydir = 2;
+		int i = 0;
+		int j = 0;
 		
 		ImageIcon moveCarImgIcon;
 		Image moveCarImg;
@@ -203,22 +238,51 @@ public class ParkingStartView extends JFrame {
 		public MakeMoveCar(ParkingStartView frame)
 		{
 			this.frame = frame;
+			frame.add(moveLabel);
+			moveLabel.setBounds(x, y, 140, 100);
+			moveLabel.setVisible(true);
 			
 			moveCarImgIcon = new ImageIcon("로고1.png");	
 			moveCarImg = moveCarImgIcon.getImage();
 			moveCarImg = moveCarImg.getScaledInstance(140,100, java.awt.Image.SCALE_SMOOTH);
+			moveCarImgIcon = new ImageIcon(moveCarImg);
+			moveLabel.setIcon(moveCarImgIcon);
+			
+			Thread thread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while (true)
+					{
+						// TODO Auto-generated method stub
+						/*x = (int)(Math.random() * 1200);
+						y = (int)(Math.random() * 700);
+						i = (int)(Math.random() * 1200);
+						j = (int)(Math.random() * 700);*/
+						if (x < 0 || x > frame.getWidth())
+						{
+							xdir *= -1; //화면의 바깥으로 나가는 경우 다시 돌아오게 하기 위함
+						}
+						if (y < 0 || y > frame.getHeight())
+						{
+							ydir *= -1; //화면의 바깥으로 나가는 경우 다시 돌아오게 하기 위함
+						}
+						x += xdir;
+						y += ydir;
+
+						moveLabel.setLocation(x, y); //이미지를 담은 Label의 위치가 계속 바뀐다.
+						//moveLabel.setLocation(i, j);
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+			thread.start();
 		}
-		
-		public void paintComponent(Graphics g)
-		{
-			//super.paintComponent(g);
-			if (moveCarImg == null)
-			{
-				return;
-			}
-			g.drawImage(moveCarImg, 0,0, this);
-		}		
-	}*/
+	} //MakeMoveCar class End
 	
 	class LoginAction implements ActionListener //'로그인'버튼 클릭 시
 	{
