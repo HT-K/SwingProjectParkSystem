@@ -50,12 +50,17 @@ public class ParkingMainView {
 	//동쪽에 테이블, 버튼을 생성한다.
 	JPanel buttonFullPanel = new JPanel(null); //버튼 들을 담기 위한 패널
 	JButton parkListButton = new JButton("주차내역"); //관리자만
+	ImageIcon parkListIcon = new ImageIcon("주차내역.jpg");
 	JButton feeCalcButton = new JButton("요금정산"); //관리자만
+	ImageIcon feeCalcIcon = new ImageIcon("요금정산.jpg");
 	JButton outCarButton = new JButton("출차하기"); //고객, 관리자
-	JButton parkState = new JButton("주차현황"); //고객, 관리자
+	ImageIcon outCarIcon = new ImageIcon("출차.jpg");
+	JButton parkStateBtn = new JButton("주차현황"); //고객, 관리자
+	ImageIcon parkStateIcon = new ImageIcon("주차현황.jpg");
 	JButton prevButton = new JButton("이전층"); //고객, 관리자
+	ImageIcon prevBtnIcon = new ImageIcon("이전층.jpg");
 	JButton nextButton = new JButton("다음층"); //고객, 관리자
-	
+	ImageIcon nextBtnIcon = new ImageIcon("다음층.jpg");
 	
 	//회원의 이름을 시간 밑에 출력 시킨다.
 	JLabel memNameLabel = new JLabel();
@@ -89,7 +94,7 @@ public class ParkingMainView {
 		outCarButton.addActionListener(new ParkingCarOut(frame, memCheck)); //'출고하기'를 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
 		feeCalcButton.addActionListener(new ParkingFeeList(frame)); //'요금정산'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
 		parkListButton.addActionListener(new ParkingCarList(frame)); //'주차내역'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 생성
-		parkState.addActionListener(new ParkingCarState(frame, memCheck)); //'주차현황'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 객체 생성
+		parkStateBtn.addActionListener(new ParkingCarState(frame, memCheck)); //'주차현황'을 클릭 시 발생한 이벤트를 처리하는 리스너를 구현한 클래스 객체 생성
 		logoutBtn.addActionListener(new ParkingLogout());
 		
 		//파일에 저장된 내용들을 전부 불러온다.
@@ -321,24 +326,48 @@ public class ParkingMainView {
 		buttonFullPanel.setBackground(Color.white); //버튼 패널의 배경색을 하얀색으로 지정
 		parkingMainFullScreen.add(buttonFullPanel); //ContentePane에 buttonFullPanel add!
 		
-		//버튼 컴포넌트 6개 buttonFullPanel에 배치
+		//버튼 컴포넌트 6개 buttonFullPanel에 배치, 이미지의 크기를 버튼의 크기에 맞게 변경하여 버튼에 삽입한다.
 		if (memCheck == 1) //이 두개의 버튼은 관리자만 필요한 것이다! 관리자로 로그인 했을 시에만 띄우도록 설정한다.
 		{
 			buttonFullPanel.add(feeCalcButton); //'요금정산'버튼 , 관리자만보이게하기
 			feeCalcButton.setBounds(15, 0, 140, 60);
+			feeCalcIcon = changeBtnImgSize(feeCalcIcon);
+			feeCalcButton.setIcon(feeCalcIcon);
+			
 			buttonFullPanel.add(parkListButton); //'주차내역'버튼, 관리자만 보이게하기
 			parkListButton.setBounds(165, 0, 140, 60);
+			parkListIcon = changeBtnImgSize(parkListIcon);
+			parkListButton.setIcon(parkListIcon);
 		}
 		
 		buttonFullPanel.add(outCarButton); //'출차하기'버튼
 		outCarButton.setBounds(15, 70, 140, 60);
-		buttonFullPanel.add(parkState); //'주차현황'버튼
-		parkState.setBounds(165, 70, 140, 60);
+		outCarIcon = changeBtnImgSize(outCarIcon);
+		outCarButton.setIcon(outCarIcon);
+		
+		buttonFullPanel.add(parkStateBtn); //'주차현황'버튼
+		parkStateBtn.setBounds(165, 70, 140, 60);
+		parkStateIcon = changeBtnImgSize(parkStateIcon);
+		parkStateBtn.setIcon(parkStateIcon);
+		
 		buttonFullPanel.add(prevButton); //'이전층'버튼
 		prevButton.setBounds(15, 140, 140, 60);
+		prevBtnIcon = changeBtnImgSize(prevBtnIcon);
+		prevButton.setIcon(prevBtnIcon);
+		
 		buttonFullPanel.add(nextButton); //'다음층'버튼
 		nextButton.setBounds(165, 140, 140, 60);
+		nextBtnIcon = changeBtnImgSize(nextBtnIcon);
+		nextButton.setIcon(nextBtnIcon);
 	} //makeSystemBtn() End
+	
+	public ImageIcon changeBtnImgSize(ImageIcon imgIcon) //메인 뷰에 기능 버튼들에 들어갈 이미지의 크기를 변경해주는 메소드!
+	{
+		Image chaImg = imgIcon.getImage();
+		chaImg = chaImg.getScaledInstance(150,60, java.awt.Image.SCALE_SMOOTH);
+		imgIcon = new ImageIcon(chaImg);
+		return imgIcon;
+	}
 	
 	class ParkingLogout implements ActionListener //로그아웃 버튼 클릭 시 이벤트를 처리하는 핸들러
 	{

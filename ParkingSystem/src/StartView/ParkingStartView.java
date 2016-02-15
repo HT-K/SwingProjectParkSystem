@@ -23,7 +23,7 @@ public class ParkingStartView extends JFrame {
 	Container frameContentPane; //전체화면인 프레임 위에 이미 생성되어 있는 컨텐트팬을 저장하기 위함, 이 컨텐트팬 위에서 GUI컴포넌트를 부착해야한다. (유의!)
 	
 	//주차 로고 이미지가 움직이게 하기 위한 변수
-	JLabel moveLabel = new JLabel();
+	JLabel moveLabel = new JLabel(); //움직이는 이미지를 담을 Label
 	int x;
 	int y;
 	int xdir;
@@ -59,7 +59,7 @@ public class ParkingStartView extends JFrame {
 	ImageIcon regIcon = new ImageIcon("회원가입.jpg");
 	JButton notMemBtn = new JButton("비회원");
 	ImageIcon notMemIcon = new ImageIcon("비회원.jpg");
-	
+
 	int memCheck = 0; //관리자와 고객을 구분하기 위한 변수
 	String memName = ""; //회원이면 그 회원의 이름을 System화면에 전달하기 위한 변수
 	
