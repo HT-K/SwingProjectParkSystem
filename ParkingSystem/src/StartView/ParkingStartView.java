@@ -54,11 +54,11 @@ public class ParkingStartView extends JFrame {
 	
 	//로그인 버튼과 회원가입 버튼
 	JButton loginBtn = new JButton("로그인");
-	ImageIcon loginIcon = new ImageIcon("로그인.jpg");
+	ImageIcon loginIcon = new ImageIcon("로그인.png");
 	JButton newRegBtn = new JButton("회원가입");
-	ImageIcon regIcon = new ImageIcon("회원가입.jpg");
+	ImageIcon regIcon = new ImageIcon("회원가입.png");
 	JButton notMemBtn = new JButton("비회원");
-	ImageIcon notMemIcon = new ImageIcon("비회원.jpg");
+	ImageIcon notMemIcon = new ImageIcon("비회원.png");
 
 	int memCheck = 0; //관리자와 고객을 구분하기 위한 변수
 	String memName = ""; //회원이면 그 회원의 이름을 System화면에 전달하기 위한 변수

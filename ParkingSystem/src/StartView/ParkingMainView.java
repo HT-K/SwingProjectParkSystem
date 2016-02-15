@@ -243,10 +243,11 @@ public class ParkingMainView {
 		
 		parkingMainFullScreen.add(logoutBtn); //로그아웃 버튼
 		changeSizeImg = logoutIcon.getImage();
-		changeSizeImg = changeSizeImg.getScaledInstance(110,30, java.awt.Image.SCALE_SMOOTH);
+		changeSizeImg = changeSizeImg.getScaledInstance(100,30, java.awt.Image.SCALE_SMOOTH);
 		logoutIcon = new ImageIcon(changeSizeImg);
+		logoutBtn.setBackground(Color.white);
 		logoutBtn.setIcon(logoutIcon);
-		logoutBtn.setBounds(1090, 160, 100, 30);
+		logoutBtn.setBounds(1090, 160, 90, 30);
 	} //makePrintName() End
 	
 	public void makeParkPlaceBtn() //주차공간 버튼을 구현하는 메소드다. 1~3층으로 구성했으며 버튼 클릭시 같은 공간에 같은 버튼들이 보여야해서 CardLayout으로 설정했다.
