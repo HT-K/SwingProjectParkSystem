@@ -66,6 +66,7 @@ public class ParkingMainView {
 	JLabel memNameLabel = new JLabel();
 	JLabel afterNameLabel = new JLabel();
 	JButton logoutBtn = new JButton("로그아웃"); //로그아웃 버튼, 누르면 로그인 화면으로 넘어간다.
+	ImageIcon logoutIcon = new ImageIcon("로그아웃.png");
 	
 	//주차 메뉴 테이블
 	String[] colName = {"차종류", "회원", "비회원"}; //열에 나타날 목록 제목들!
@@ -241,6 +242,10 @@ public class ParkingMainView {
 		afterNameLabel.setText("님 접속을 환영합니다.");
 		
 		parkingMainFullScreen.add(logoutBtn); //로그아웃 버튼
+		changeSizeImg = logoutIcon.getImage();
+		changeSizeImg = changeSizeImg.getScaledInstance(110,30, java.awt.Image.SCALE_SMOOTH);
+		logoutIcon = new ImageIcon(changeSizeImg);
+		logoutBtn.setIcon(logoutIcon);
 		logoutBtn.setBounds(1090, 160, 100, 30);
 	} //makePrintName() End
 	
