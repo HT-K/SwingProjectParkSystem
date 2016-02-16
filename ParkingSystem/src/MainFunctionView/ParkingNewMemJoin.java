@@ -6,6 +6,7 @@ import MainFunctionView.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.ImageGraphicAttribute;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -21,7 +22,7 @@ public class ParkingNewMemJoin implements ActionListener {
 	
 	//회원가입 다이어로그 구성요소
 	JDialog registerDialog; //가장 큰 틀이 될 다이어로그
-	JPanel registerPanel = new JPanel(null); //회원가입폼도 좌표로 지정하자!
+	JPanel registerPanel = new JPanel(null); //회원가입폼도 좌표로 지정하자! 
 	JLabel regTitleLabel = new JLabel("회원 가입");
 	JLabel regIdLabel = new JLabel("아이디 : ");
 	JTextField regIdText = new JTextField("", 12); //아이디는 12자리까지만 입력가능
@@ -36,6 +37,11 @@ public class ParkingNewMemJoin implements ActionListener {
 	JTextField regEmailText = new JTextField(""); //이메일 주소 입력
 	JButton regOkBtn = new JButton("가입완료"); //가입완료 버튼
 	JButton regCancelBtn = new JButton("가입취소"); //가입취소 버튼
+	
+	ImageIcon dupleIcon = new ImageIcon("중복체크.png");
+	ImageIcon regOkIcon = new ImageIcon("가입완료.png");
+	ImageIcon regCancelIcon = new ImageIcon("취소.png");
+	Image changeSize;
 	
 	public ParkingNewMemJoin (ParkingStartView frame)
 	{
@@ -68,14 +74,16 @@ public class ParkingNewMemJoin implements ActionListener {
 		registerPanel.add(regTitleLabel); //Dialog 맨 윗줄에 제목
 		regTitleLabel.setBounds(110, 20, 70, 20);
 		
-		
 		registerPanel.add(regIdLabel); //아이디 입력창
 		registerPanel.add(regIdText);
 		registerPanel.add(regDupleBtn);
 		regIdLabel.setBounds(25, 50, 100, 30);
 		regIdText.setBounds(75, 50, 100, 30);
 		regIdText.requestFocus(); //아이디 입력창에 포커스를 맞춘다.
-		regDupleBtn.setBounds(180, 50, 90, 30);
+		
+		regDupleBtn.setBounds(180, 50, 90, 30); //중복체크 버튼
+		dupleIcon = changeSize(dupleIcon); //중복체크 버튼 이미지 크기 조절
+		regDupleBtn.setIcon(dupleIcon); //버튼에 이미지 씌우기
 		
 		registerPanel.add(regPwdLabel); //비밀번호 입력창
 		registerPanel.add(regPwdText);
@@ -100,11 +108,23 @@ public class ParkingNewMemJoin implements ActionListener {
 		registerPanel.add(regOkBtn); //'가입완료'버튼
 		registerPanel.add(regCancelBtn); //'가입취소'버튼
 		regOkBtn.setBounds(50, 230, 90, 30);
+		regOkIcon = changeSize(regOkIcon); //가입완료 버튼 이미지 크기 조절
+		regOkBtn.setIcon(regOkIcon); //가입완료 버튼에 이미지 씌우기
 		regCancelBtn.setBounds(155, 230, 90, 30);
+		regCancelIcon = changeSize(regCancelIcon); //가입취소 버튼 이미지 크기 조절
+		regCancelBtn.setIcon(regCancelIcon); //가입취소 버튼에 이미지 씌우기
 		
 		registerDialog.add(registerPanel);
 		registerDialog.setVisible(true);
 	} //makeRegisterDialog() End
+	
+	public ImageIcon changeSize(ImageIcon imgIcon) //회원가입 다이어로그에 있는 버튼의 이미지 크기를 변환시켜주는 메소드
+	{
+		Image chaImg = imgIcon.getImage();
+		chaImg = chaImg.getScaledInstance(100,30, java.awt.Image.SCALE_SMOOTH);
+		imgIcon = new ImageIcon(chaImg);
+		return imgIcon;
+	}
 	
 	class regDupleAction implements ActionListener //'중복체크'버튼 클릭 시
 	{
@@ -177,6 +197,7 @@ public class ParkingNewMemJoin implements ActionListener {
 			{
 				memList.add(new MemberInfo(2,id, pwd, name, phone, email)); //입력한 id와 같은 id가 없으면 ArrayList에 회원가입 내용을 저장한다. , 회원가입을 하는 인원들은 모두 memCheck값이 2로 저장된다.
 				FileSystem.saveMemberInfo(memList);
+				JOptionPane.showMessageDialog(frame, "회원가입이 완료되었습니다.");
 				System.out.println("체크! --------- 회원가입이 완료되었습니다. ");
 				registerDialog.setVisible(false);
 				registerDialog.dispose();
