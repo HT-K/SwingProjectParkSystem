@@ -11,6 +11,7 @@ import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 	
@@ -99,6 +100,7 @@ public class ParkingCarState implements ActionListener {
 				rowName[2][1] = String.valueOf(thirdIn);
 				rowName[2][2] = String.valueOf(thirdRemain); 
 				parkTableModel = new DefaultTableModel(rowName, colName); //초기화 시킨 데이터를 DefaultTableModel에 넣어서 객체를 생성하고
+				
 				parkJTable.setModel(parkTableModel); //새로 생성한 TableModel을 JTable에 set시키면 새로운 데이터를 가진 TableModel이 화면에 보이게 된다.
 				try {
 					thread.sleep(1000);

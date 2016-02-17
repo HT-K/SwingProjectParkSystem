@@ -2,15 +2,21 @@ package MainFunctionView;
 
 import StartProgram.*;
 import StartView.*;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import MainFunctionView.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.*;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,13 +39,28 @@ public class ParkingFeeList implements ActionListener {
 	JTextField firstDateText = new JTextField("yyyy-MM-dd");
 	JLabel tildeLabel = new JLabel("~");
 	JTextField secondDateText = new JTextField("yyyy-MM-dd");
+	
+	JButton startTermBtn = new JButton("검색 시작");
+	JButton endTermBtn = new JButton("검색 끝");
 	JButton termOkBtn = new JButton("검색확인");
+	
+	UtilDateModel model1 = new UtilDateModel(); //기간 검색에서 달력을 출력하기 위해 필요한 것들, JDatePicker 이용
+	JDatePanelImpl datePanel1 = new JDatePanelImpl(model1);
+	JDatePickerImpl datePicker1 = new JDatePickerImpl(datePanel1, new DateLabelFormatter());
+	
+	UtilDateModel model2 = new UtilDateModel(); //기간 검색에서 달력을 출력하기 위해 필요한 것들
+	JDatePanelImpl datePanel2 = new JDatePanelImpl(model2);
+	JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+	
+	ImageIcon imgIcon = new ImageIcon("로그아웃.png");
 	
 	public ParkingFeeList (ParkingStartView frame) //ParkingSystem에서 '요금정산'버튼 클릭 이벤트 발생 시 요금정산 다이어로그 출력 위치가 넘어오게 된다.
 	{
 		this.frame = frame; //ParkingStartView객체의 frame을 가져와서 저장		
 		
 		feeOkButton.addActionListener(new feeOkListener()); //'정산확인' 버튼 클릭 시, 이벤트 리스너
+		startTermBtn.addActionListener(new startTermListener());
+		endTermBtn.addActionListener(new endTermListener());
 		termOkBtn.addActionListener(new termOkListener()); //기간 검색 다이어로그의 '검색확안' 버튼 클릭 시 이벤트 리스너
 	} //ParkingFeeList 생성자 End
 
@@ -112,24 +133,24 @@ public class ParkingFeeList implements ActionListener {
 	public void makeTermSearchDig() //기간을 지정해서 요금 정산을 하고 싶을 시 이 다이어로그가 호출되게 된다.
 	{
 		termSearchDig = new JDialog(frame, "기간 검색 요금 정산"); //기간 검색창을 띄우기 위한 다이어로그
-		termSearchDig.setBounds(frame.getWidth() / 2, frame.getHeight() / 2, 265, 150);
+		termSearchDig.setBounds(frame.getWidth() / 2, frame.getHeight() / 2, 270, 150);
 		termSearchDig.add(termDigPanel);
-		termDigPanel.setBounds(0, 0, 200, 200);
+		termDigPanel.setBounds(0, 0, 200, 300);
 		
 		tetmTitleLabel.setBounds(65, 0, 150, 20);
-		firstDateText.setBounds(10, 30, 100, 30);
+		startTermBtn.setBounds(10, 30, 100, 30);
 		tildeLabel.setBounds(120, 30, 20, 30);
 		tildeLabel.setFont(new Font("고딕", Font.PLAIN, 15));
-		secondDateText.setBounds(140, 30, 100, 30);
+		endTermBtn.setBounds(140, 30, 100, 30);
 		termOkBtn.setBounds(75, 70, 100, 30);
 		
 		termDigPanel.add(tetmTitleLabel);
-		termDigPanel.add(firstDateText);
+		termDigPanel.add(startTermBtn);
 		termDigPanel.add(tildeLabel);
-		termDigPanel.add(secondDateText);
+		termDigPanel.add(endTermBtn);
 		termDigPanel.add(termOkBtn);
 		
-		firstDateText.requestFocus();
+		//firstDateText.requestFocus();
 		termSearchDig.setVisible(true);
 	} //makeTermSearchDig() End
 	
@@ -180,24 +201,24 @@ public class ParkingFeeList implements ActionListener {
 		return resultFee;
 	} //dayFee() End
 	
-	public int searchFee(String date1, String date2) //기간을 설정, 검색해서 요금정산 결과를 얻는 메소드
+	public int searchFee(String date1, String date2) //기간을 설정, 검색해서 요금정산 결과를 얻는 메소드, 각 스트링변수에는 YYYY-MM-DD 형태의 값이 들어있다 (JDatePicker를 이용해서 받아온 날짜 값이다)
 	{
 		int resultFee = 0;
 
-		//첫번째 텍스트 필드에 있는 년,월,일 값을 가져오는 코드
-		int fYear = Integer.parseInt(firstDateText.getText().substring(0, 4));
-		int fMonth = Integer.parseInt(firstDateText.getText().substring(5, 7));
-		int fDay = Integer.parseInt(firstDateText.getText().substring(8));
+		//첫번째 JFormattedTextField() 필드에 있는 년,월,일 값을 가져오는 코드
+		int fYear = Integer.parseInt(date1.substring(0, 4)); 
+		int fMonth = Integer.parseInt(date1.substring(5, 7));
+		int fDay = Integer.parseInt(date1.substring(8));
 		
-		//두번째 텍스트 필드에 있는 년,월,일 값을 가져오는 코드
-		int tYear = Integer.parseInt(secondDateText.getText().substring(0, 4));
-		int tMonth = Integer.parseInt(secondDateText.getText().substring(5, 7));
-		int tDay = Integer.parseInt(secondDateText.getText().substring(8));
+		//두번째 JFormattedTextField() 필드에 있는 년,월,일 값을 가져오는 코드
+		int tYear = Integer.parseInt(date2.substring(0, 4));
+		int tMonth = Integer.parseInt(date2.substring(5, 7));
+		int tDay = Integer.parseInt(date2.substring(8));
 		
 		Date sDay = new Date(fYear - 1900, fMonth -1, fDay); //sDay에 오늘의 년도, 월, 일을 집어넣는다. ex)2016년 1월 1일 00:00:00 으로 저장된다.
-		System.out.println("오늘의 시작! : " + sDay);
+		System.out.println("기간 시작! : " + sDay);
 		Date eDay = new Date(tYear - 1900, tMonth -1, tDay, 23, 59, 59); //eDay에 오늘의 년도, 월, 일, 23시59분59초를 넣어놓는다.
-		System.out.println("오늘의 끝! : " + eDay);
+		System.out.println("기간 끝! : " + eDay);
 		
 		for (ParkFeeInfo fee : ParkingCarOut.feeList) //출차 차량에 대한 요금정보와 출차시간을 가진 feeList의 feeInfo객체들을 하나씩 꺼내서 값을 비교한다.
 		{
@@ -211,7 +232,7 @@ public class ParkingFeeList implements ActionListener {
 		return resultFee;
 	} //searchFee() End
 	
-	class feeOkListener implements ActionListener
+	class feeOkListener implements ActionListener //정산확인 버튼 클릭 시 이벤트 핸들러
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -220,6 +241,93 @@ public class ParkingFeeList implements ActionListener {
 			feeResultDialog.dispose();
 		}
 	} //feeOkListener class End
+	
+	class startTermListener implements ActionListener //검색 시작 날짜를 알기 위한 공간
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			startTermBtn.setVisible(false);
+			
+			model1 = new UtilDateModel();
+			datePanel1 = new JDatePanelImpl(model1);
+			datePicker1 = new JDatePickerImpl(datePanel1, new DateLabelFormatter());
+			datePicker1.setBounds(5, 30, 110, 30);
+
+			termDigPanel.add(datePicker1);
+		}
+	}
+	
+	class endTermListener implements ActionListener //검색 끝 날짜를 알기 위한 버튼 클릭 시
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			endTermBtn.setVisible(false);
+			
+			model2 = new UtilDateModel();
+			datePanel2 = new JDatePanelImpl(model2);
+			//DatePicker datePicker2 = new DatePicker(datePanel2, new DateLabelFormatter(), termDigPanel);
+			datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+			datePicker2.setBounds(140, 30, 110, 30);
+
+			termDigPanel.add(datePicker2);
+		}
+	}
+	
+/*	public class DatePicker extends JDatePickerImpl
+	{
+		JDatePickerImpl pre;
+		JDatePanelImpl datePanel;
+		JFormattedTextField text = new JFormattedTextField();
+		JButton btn = new JButton("테스트");
+		
+		public DatePicker(JDatePanelImpl datePanel, AbstractFormatter formatter, JPanel termDigPanel) {
+			super(datePanel, formatter);
+			pre = this;
+			
+			this.datePanel = datePanel;
+			
+			termDigPanel.setPreferredSize(new Dimension(100, 30));
+			termDigPanel.add(text);
+			text.setBounds(0, 0, 80, 30);
+			termDigPanel.add(btn);
+			btn.setBounds(80, 0, 100, 30);
+			// TODO Auto-generated constructor stub
+			btn.addActionListener(new btnActionListener());
+		}
+		
+		class btnActionListener implements ActionListener
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				pre.setVisible(true);
+				datePanel.setVisible(true);
+			}
+			
+		}
+	}*/
+	
+	public class DateLabelFormatter extends AbstractFormatter { //JDatePicker에서 날짜 선택 시 선택된 날짜값을 스트링 값으로 변환시키는 클래스
+		private String datePattern = "yyyy-MM-dd";
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+		
+		@Override
+		public Object stringToValue(String text) throws ParseException {
+			return dateFormatter.parseObject(text);
+		}
+
+		@Override
+		public String valueToString(Object value) throws ParseException {
+			if (value != null) {
+				Calendar cal = (Calendar) value;
+				return dateFormatter.format(cal.getTime());
+			}
+			Calendar today = Calendar.getInstance();
+			return dateFormatter.format(today.getTime());
+		}
+	} //DateLabelFormatter class End
 	
 	class termOkListener implements ActionListener //기간 검색 결과 확인을 눌렀을 시 동작하게 되는 클래스
 	{
@@ -230,9 +338,12 @@ public class ParkingFeeList implements ActionListener {
 			termSearchDig.setVisible(false);
 			termSearchDig.dispose();
 			
-			titleFeeLabel.setText("검색 요금 정산 결과입니다.");
-			String date1 = firstDateText.getText();
-			String date2 = secondDateText.getText();
+			//JDatePicker에서 선택된 날짜가 DateLabelFormatter 객체에서 SimpleDateFormat을 통해 String값으로 반환된다.
+			String date1 = datePicker1.getJFormattedTextField().getText(); 
+			System.out.println(date1);
+			String date2 = datePicker2.getJFormattedTextField().getText();
+			System.out.println(date2);
+			
 			resultFee = searchFee(date1, date2);
 			System.out.println("검색 결과: " + resultFee);
 			titleFeeLabel.setText("검색 요금 정산 결과입니다.");
