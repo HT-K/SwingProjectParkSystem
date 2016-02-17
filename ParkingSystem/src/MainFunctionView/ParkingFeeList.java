@@ -249,12 +249,12 @@ public class ParkingFeeList implements ActionListener {
 			// TODO Auto-generated method stub
 			startTermBtn.setVisible(false);
 			
-			model1 = new UtilDateModel();
-			datePanel1 = new JDatePanelImpl(model1);
-			datePicker1 = new JDatePickerImpl(datePanel1, new DateLabelFormatter());
+			model1 = new UtilDateModel(); //달력이라고 생각하면 된다.
+			datePanel1 = new JDatePanelImpl(model1); //달력형태인 model2를 패널에 담아놓는다.
+			datePicker1 = new JDatePickerImpl(datePanel1, new DateLabelFormatter()); //구현된 JDatePickerImpl 클래스를 이용해 달력 출력과 날짜 클릭 시 DateLabelFormatter텍스트 필드에 자동 추가되게한다.
 			datePicker1.setBounds(5, 30, 110, 30);
 
-			termDigPanel.add(datePicker1);
+			termDigPanel.add(datePicker1); //다이어로그에 JDatePicker출력
 		}
 	}
 	
@@ -265,17 +265,17 @@ public class ParkingFeeList implements ActionListener {
 			// TODO Auto-generated method stub
 			endTermBtn.setVisible(false);
 			
-			model2 = new UtilDateModel();
-			datePanel2 = new JDatePanelImpl(model2);
-			//DatePicker datePicker2 = new DatePicker(datePanel2, new DateLabelFormatter(), termDigPanel);
-			datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+			model2 = new UtilDateModel(); //달력이라고 생각하면 된다.
+			datePanel2 = new JDatePanelImpl(model2); //달력형태인 model2를 패널에 담아놓는다.
+			datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter()); //구현된 JDatePickerImpl 클래스를 이용해 달력 출력과 날짜 클릭 시 DateLabelFormatter텍스트 필드에 자동 추가되게한다.
 			datePicker2.setBounds(140, 30, 110, 30);
 
-			termDigPanel.add(datePicker2);
+			termDigPanel.add(datePicker2); //다이어로그에 JDatePicker출력
 		}
 	}
 	
-/*	public class DatePicker extends JDatePickerImpl
+	//내가 직접 구현해보고 싶다...
+/*	public class DatePicker extends JDatePickerImpl 
 	{
 		JDatePickerImpl pre;
 		JDatePanelImpl datePanel;
