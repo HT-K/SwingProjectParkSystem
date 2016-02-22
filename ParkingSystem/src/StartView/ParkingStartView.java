@@ -226,8 +226,10 @@ public class ParkingStartView extends JFrame {
 		//newRegBtn.setFont(new Font("굴림", Font.BOLD, 10));
 		regIcon = changeSize(regIcon); //회원가입 버튼에 들어갈 이미지의 크기 조정
 		newRegBtn.setIcon(regIcon); //회원가입 버튼에 이미지 삽입
+		newRegBtn.setMargin(new Insets(0, 10, 0, 10));
 		
 		notMemBtn.setBounds(328, 131, 75, 35); //비회원 버튼
+		notMemBtn.setMargin(new Insets(0, 5, 0, 0));
 		//notMemBtn.setBackground(new Color(0xEEEEEE));
 		//notMemBtn.setFont(new Font("굴림", Font.BOLD, 10));
 		notMemIcon = changeSize(notMemIcon); //비회원 버튼에 들어갈 이미지의 크기 조정
