@@ -73,7 +73,7 @@ public class ParkingMainView {
 	String[][] rowName = new String[4][3]; //행에 제목과 내용을 붙이기 위해 3X3의 테이블형태를 가진 2차원배열 생성
 	DefaultTableModel parkTableModel; //DefaultTabelModel (vector, vector)형태로 사용예정
 	JTable parkJTable; //DefaultTableModel을 담기 위한 JTable변수
-	
+	hklkhkj
 	//주차 요금 안내판
 	ImageIcon feeInfoIcon;
 	JLabel feeInfoImgLabel = new JLabel();
