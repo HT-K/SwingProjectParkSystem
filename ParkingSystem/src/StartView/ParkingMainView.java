@@ -382,7 +382,7 @@ public class ParkingMainView {
 			// TODO Auto-generated method stub
 			frame.dispose(); //현재 프레임을 종료시킨다. dispose()는 종료시켜주는 메소드이다.
 			new ParkingStartView(); //다시 로그인 화면이 사용자에게 보이도록 새로운 프레임을 생성한다.
-		}
+		}//
 	} //ParkingLogout class End
 	
 } //ParkingMainView class End
